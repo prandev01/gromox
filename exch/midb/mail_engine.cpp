@@ -4381,7 +4381,7 @@ static void mail_engine_notification_proc(const char *dir,
 	// 		system_services_broadcast_event(temp_buff);
 	// }
 
-	mail_engine_sync_contents(pidb.get(), folder_id);
+	// mail_engine_sync_contents(pidb.get(), folder_id);
 		break;
 	}
 	case db_notify_type::message_modified: {
@@ -4404,7 +4404,7 @@ static void mail_engine_notification_proc(const char *dir,
 		message_id = n->old_message_id;		
 		mail_engine_delete_notification_message(pidb.get(), folder_id, message_id);
 
-
+mail_engine_sync_contents(pidb.get(), folder_id);
 	// 				if (folder_id != 0) {  // Check if folder_id is assigned
 		
 	// 		snprintf(sql_string, std::size(sql_string), "SELECT name FROM"
@@ -4423,6 +4423,7 @@ static void mail_engine_notification_proc(const char *dir,
 		message_id = n->message_id;
 		mail_engine_add_notification_message(pidb.get(), folder_id, message_id);
 
+mail_engine_sync_contents(pidb.get(), folder_id);
 		mlog(LV_NOTICE, "derick-debug::message_moved oldfolderid = %d, oldmessageid = %d", n->old_folder_id, n->old_message_id);
 		mlog(LV_NOTICE, "derick-debug::message_moved folderid = %d, messageid = %d", n->folder_id, n->message_id);
 		
