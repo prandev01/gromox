@@ -4378,6 +4378,7 @@ static void mail_engine_notification_proc(const char *dir,
 								pidb->username.c_str(), pstmt.col_text(0));
 			pstmt.finalize();
 			system_services_broadcast_event(temp_buff);
+			mlog(LV_NOTICE, "derick-debug::folder_modified buff = %s", temp_buff);
 	}
 
 		break;
@@ -4423,6 +4424,7 @@ static void mail_engine_notification_proc(const char *dir,
 
 		mlog(LV_NOTICE, "derick-debug::message_moved oldfolderid = %d, oldmessageid = %d", n->old_folder_id, n->old_message_id);
 		mlog(LV_NOTICE, "derick-debug::message_moved folderid = %d, messageid = %d", n->folder_id, n->message_id);
+		mlog(LV_NOTICE, "derick-debug::message_moved buff = %s", temp_buff);
 		
 		break;
 	}
