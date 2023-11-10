@@ -4401,7 +4401,7 @@ static void mail_engine_notification_proc(const char *dir,
 		auto n = static_cast<const DB_NOTIFY_MESSAGE_MVCP *>(pdb_notify->pdata);
 		folder_id = n->old_folder_id;
 		message_id = n->old_message_id;		
-		mail_engine_delete_notification_message(pidb.get(), folder_id, message_id);
+		// mail_engine_delete_notification_message(pidb.get(), folder_id, message_id);
 
 
 					if (folder_id != 0) {  // Check if folder_id is assigned
