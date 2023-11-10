@@ -4011,6 +4011,7 @@ static void mail_engine_delete_notification_message(
 	if (pstmt == nullptr || pstmt.step() != SQLITE_ROW ||
 	    gx_sql_col_uint64(pstmt, 0) != folder_id)
 		return;
+	mlog(LV_NOTICE, "derick-debug::mail_engine_delete_notification_message");
 	pstmt.finalize();
 	snprintf(sql_string, std::size(sql_string), "DELETE FROM messages"
 	        " WHERE message_id=%llu", LLU{message_id});
@@ -4378,7 +4379,6 @@ static void mail_engine_notification_proc(const char *dir,
 								pidb->username.c_str(), pstmt.col_text(0));
 			pstmt.finalize();
 			system_services_broadcast_event(temp_buff);
-			mlog(LV_NOTICE, "derick-debug::folder_modified buff = %s", temp_buff);
 	}
 
 		break;
@@ -4424,7 +4424,6 @@ static void mail_engine_notification_proc(const char *dir,
 
 		mlog(LV_NOTICE, "derick-debug::message_moved oldfolderid = %d, oldmessageid = %d", n->old_folder_id, n->old_message_id);
 		mlog(LV_NOTICE, "derick-debug::message_moved folderid = %d, messageid = %d", n->folder_id, n->message_id);
-		mlog(LV_NOTICE, "derick-debug::message_moved buff = %s", temp_buff);
 		
 		break;
 	}
