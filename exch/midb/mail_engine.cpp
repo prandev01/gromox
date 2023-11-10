@@ -4368,19 +4368,20 @@ static void mail_engine_notification_proc(const char *dir,
 		mlog(LV_NOTICE, "derick-debug::folder_modified folderid = %d", n->folder_id);
 		mail_engine_modify_notification_folder(pidb.get(), folder_id);
 
-			if (folder_id != 0) {  // Check if folder_id is assigned
+	// 		if (folder_id != 0) {  // Check if folder_id is assigned
 		
-			snprintf(sql_string, std::size(sql_string), "SELECT name FROM"
-								" folders WHERE folder_id=%llu", LLU{folder_id});
-			auto pstmt = gx_sql_prep(pidb->psqlite, sql_string);
-			if (pstmt == nullptr || pstmt.step() != SQLITE_ROW)
-					return;
-			snprintf(temp_buff, 1280, "FOLDER-TOUCH %s %s",
-								pidb->username.c_str(), pstmt.col_text(0));
-			pstmt.finalize();
-			system_services_broadcast_event(temp_buff);
-	}
+	// 		snprintf(sql_string, std::size(sql_string), "SELECT name FROM"
+	// 							" folders WHERE folder_id=%llu", LLU{folder_id});
+	// 		auto pstmt = gx_sql_prep(pidb->psqlite, sql_string);
+	// 		if (pstmt == nullptr || pstmt.step() != SQLITE_ROW)
+	// 				return;
+	// 		snprintf(temp_buff, 1280, "FOLDER-TOUCH %s %s",
+	// 							pidb->username.c_str(), pstmt.col_text(0));
+	// 		pstmt.finalize();
+	// 		system_services_broadcast_event(temp_buff);
+	// }
 
+	mail_engine_sync_contents(pidb.get(), folder_id);
 		break;
 	}
 	case db_notify_type::message_modified: {
@@ -4401,21 +4402,21 @@ static void mail_engine_notification_proc(const char *dir,
 		auto n = static_cast<const DB_NOTIFY_MESSAGE_MVCP *>(pdb_notify->pdata);
 		folder_id = n->old_folder_id;
 		message_id = n->old_message_id;		
-		// mail_engine_delete_notification_message(pidb.get(), folder_id, message_id);
+		mail_engine_delete_notification_message(pidb.get(), folder_id, message_id);
 
 
-					if (folder_id != 0) {  // Check if folder_id is assigned
+	// 				if (folder_id != 0) {  // Check if folder_id is assigned
 		
-			snprintf(sql_string, std::size(sql_string), "SELECT name FROM"
-								" folders WHERE folder_id=%llu", LLU{folder_id});
-			auto pstmt = gx_sql_prep(pidb->psqlite, sql_string);
-			if (pstmt == nullptr || pstmt.step() != SQLITE_ROW)
-					return;
-			snprintf(temp_buff, 1280, "FOLDER-TOUCH %s %s",
-								pidb->username.c_str(), pstmt.col_text(0));
-			pstmt.finalize();
-			system_services_broadcast_event(temp_buff);
-	}
+	// 		snprintf(sql_string, std::size(sql_string), "SELECT name FROM"
+	// 							" folders WHERE folder_id=%llu", LLU{folder_id});
+	// 		auto pstmt = gx_sql_prep(pidb->psqlite, sql_string);
+	// 		if (pstmt == nullptr || pstmt.step() != SQLITE_ROW)
+	// 				return;
+	// 		snprintf(temp_buff, 1280, "FOLDER-TOUCH %s %s",
+	// 							pidb->username.c_str(), pstmt.col_text(0));
+	// 		pstmt.finalize();
+	// 		system_services_broadcast_event(temp_buff);
+	// }
 
 
 		folder_id = n->folder_id;
@@ -4445,7 +4446,6 @@ static void mail_engine_notification_proc(const char *dir,
 	default:
 		break;
 	}
-
 }
 
 void mail_engine_init(const char *default_charset, const char *org_name,
