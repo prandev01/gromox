@@ -3941,6 +3941,7 @@ static void mail_engine_add_notification_message(
 	flags_buff[0] = '\0';
 	auto str = propvals.get<const char>(PidTagMidString);
 	if (str == nullptr) {
+		mlog(LV_NOTICE, "derick-debug::PidTagMidString");
 		snprintf(sql_string, std::size(sql_string), "SELECT mid_string, flag_string"
 		          " FROM mapping WHERE message_id=%llu", LLU{message_id});
 		auto pstmt = gx_sql_prep(pidb->psqlite, sql_string);
