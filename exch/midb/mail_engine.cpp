@@ -4404,7 +4404,8 @@ static void mail_engine_notification_proc(const char *dir,
 		message_id = n->message_id;
 		mail_engine_add_notification_message(pidb.get(), folder_id, message_id);
 
-		mlog(LV_NOTICE, "derick-debug::message_moved oldfolderid = %d, folderid = %d", n->old_folder_id, n->folder_id);
+		mlog(LV_NOTICE, "derick-debug::message_moved oldfolderid = %d, oldmessageid = %d", n->old_folder_id, n->old_message_id);
+		mlog(LV_NOTICE, "derick-debug::message_moved folderid = %d, messageid = %d", n->folder_id, n->message_id);
 		break;
 	}
 	case db_notify_type::folder_copied: {
