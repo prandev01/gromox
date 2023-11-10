@@ -4318,6 +4318,7 @@ static void mail_engine_notification_proc(const char *dir,
 	uint64_t parent_id;
 	uint64_t message_id;
 	char temp_buff[1280];
+	char temp_buff1[1280];
 	char sql_string[1024];
 	
 	if (b_table)
@@ -4391,10 +4392,10 @@ static void mail_engine_notification_proc(const char *dir,
 		auto pstmt = gx_sql_prep(pidb->psqlite, sql_string);
 		if (pstmt == nullptr || pstmt.step() != SQLITE_ROW)
 				return;
-		snprintf(temp_buff, 1280, "FOLDER-TOUCH %s %s",
+		snprintf(temp_buff1, 1280, "FOLDER-TOUCH %s %s",
 							pidb->username.c_str(), pstmt.col_text(0));
 		pstmt.finalize();
-		system_services_broadcast_event(temp_buff);
+		system_services_broadcast_event(temp_buff1);
 
 
 		folder_id = n->folder_id;
@@ -4424,7 +4425,7 @@ static void mail_engine_notification_proc(const char *dir,
 	// broadcasts a FOLDER-TOUCH event using gromox-event protocol
 
 	if (folder_id != 0) {  // Check if folder_id is assigned
-		temp_buff = "";
+		
 		snprintf(sql_string, std::size(sql_string), "SELECT name FROM"
 							" folders WHERE folder_id=%llu", LLU{folder_id});
 		auto pstmt = gx_sql_prep(pidb->psqlite, sql_string);
