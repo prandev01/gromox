@@ -3941,7 +3941,6 @@ static void mail_engine_add_notification_message(
 	flags_buff[0] = '\0';
 	auto str = propvals.get<const char>(PidTagMidString);
 	if (str == nullptr) {
-		mlog(LV_NOTICE, "derick-debug::PidTagMidString");
 		snprintf(sql_string, std::size(sql_string), "SELECT mid_string, flag_string"
 		          " FROM mapping WHERE message_id=%llu", LLU{message_id});
 		auto pstmt = gx_sql_prep(pidb->psqlite, sql_string);
@@ -3968,6 +3967,7 @@ static void mail_engine_add_notification_message(
 		return;
 	uidnext = sqlite3_column_int64(pstmt, 0);
 	pstmt.finalize();
+	mlog(LV_NOTICE, "derick-debug::uidnext=%d", uidnext);
 	snprintf(sql_string, std::size(sql_string), "UPDATE folders SET"
 		" uidnext=uidnext+1, sort_field=%d "
 		"WHERE folder_id=%llu", FIELD_NONE, LLU{folder_id});
