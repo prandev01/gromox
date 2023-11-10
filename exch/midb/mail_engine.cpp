@@ -3967,7 +3967,6 @@ static void mail_engine_add_notification_message(
 		return;
 	uidnext = sqlite3_column_int64(pstmt, 0);
 	pstmt.finalize();
-	mlog(LV_NOTICE, "derick-debug::uidnext=%d", uidnext);
 	snprintf(sql_string, std::size(sql_string), "UPDATE folders SET"
 		" uidnext=uidnext+1, sort_field=%d "
 		"WHERE folder_id=%llu", FIELD_NONE, LLU{folder_id});
@@ -4367,19 +4366,6 @@ static void mail_engine_notification_proc(const char *dir,
 		folder_id = n->folder_id;
 		mlog(LV_NOTICE, "derick-debug::folder_modified folderid = %d", n->folder_id);
 		mail_engine_modify_notification_folder(pidb.get(), folder_id);
-
-		if (folder_id != 0) {  // Check if folder_id is assigned
-		
-			snprintf(sql_string, std::size(sql_string), "SELECT name FROM"
-								" folders WHERE folder_id=%llu", LLU{folder_id});
-			auto pstmt = gx_sql_prep(pidb->psqlite, sql_string);
-			if (pstmt == nullptr || pstmt.step() != SQLITE_ROW)
-					return;
-			snprintf(temp_buff, 1280, "FOLDER-TOUCH %s %s",
-								pidb->username.c_str(), pstmt.col_text(0));
-			pstmt.finalize();
-			system_services_broadcast_event(temp_buff);
-		}
 		break;
 	}
 	case db_notify_type::message_modified: {
@@ -4407,6 +4393,20 @@ static void mail_engine_notification_proc(const char *dir,
 
 		mlog(LV_NOTICE, "derick-debug::message_moved oldfolderid = %d, oldmessageid = %d", n->old_folder_id, n->old_message_id);
 		mlog(LV_NOTICE, "derick-debug::message_moved folderid = %d, messageid = %d", n->folder_id, n->message_id);
+		
+			if (folder_id != 0) {  // Check if folder_id is assigned
+		
+			snprintf(sql_string, std::size(sql_string), "SELECT name FROM"
+								" folders WHERE folder_id=%llu", LLU{folder_id});
+			auto pstmt = gx_sql_prep(pidb->psqlite, sql_string);
+			if (pstmt == nullptr || pstmt.step() != SQLITE_ROW)
+					return;
+			snprintf(temp_buff, 1280, "FOLDER-TOUCH %s %s",
+								pidb->username.c_str(), pstmt.col_text(0));
+			pstmt.finalize();
+			system_services_broadcast_event(temp_buff);
+	}
+
 		break;
 	}
 	case db_notify_type::folder_copied: {
@@ -4427,6 +4427,7 @@ static void mail_engine_notification_proc(const char *dir,
 	default:
 		break;
 	}
+
 }
 
 void mail_engine_init(const char *default_charset, const char *org_name,
