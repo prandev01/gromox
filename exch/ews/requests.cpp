@@ -147,6 +147,7 @@ void process(mCreateFolderRequest&& request, XMLElement* response, const EWSCont
 void process(mCreateItemRequest&& request, XMLElement* response, const EWSContext& ctx)
 {
 	ctx.experimental();
+	mlog(LV_NOTICE, "derick-debug::CreateCalendarItem");
 
 	response->SetName("m:CreateItemResponse");
 
