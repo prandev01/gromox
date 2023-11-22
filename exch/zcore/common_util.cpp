@@ -1978,18 +1978,25 @@ BOOL common_util_message_to_ical(store_object *pstore, uint64_t message_id,
 	auto pinfo = zs_get_info();
 	cpid_t cpid = pinfo == nullptr ? CP_UTF8 : pinfo->cpid;
 	if (!exmdb_client::read_message(pstore->get_dir(), nullptr, cpid,
-	    message_id, &pmsgctnt) || pmsgctnt == nullptr)
-		return FALSE;
+	    message_id, &pmsgctnt) || pmsgctnt == nullptr) {
+				mlog(LV_NOTICE, "derick-debug1::exmdb_client::read_message heyhey");
+				return FALSE;
+			}
+		
 	common_util_set_dir(pstore->get_dir());
 	if (!oxcical_export(pmsgctnt, ical, g_org_name,
 	    common_util_alloc, common_util_get_propids, cu_id2user)) {
+				mlog(LV_NOTICE, "derick-debug1::!oxcical_export heyhey");
 		using LLU = unsigned long long;
 		mlog(LV_DEBUG, "D-2202: oxcical_export %s:%llxh failed",
 			pstore->get_dir(), LLU{message_id});
 		return FALSE;
 	}
-	if (!ical.serialize(tmp_buff, std::size(tmp_buff)))
+	if (!ical.serialize(tmp_buff, std::size(tmp_buff))) {
+		mlog(LV_NOTICE, "derick-debug1::!ical.serialize heyhey");
 		return FALSE;	
+	}
+		
 	pical_bin->cb = strlen(tmp_buff);
 	pical_bin->pc = common_util_dup(tmp_buff);
 	return pical_bin->pc != nullptr ? TRUE : FALSE;

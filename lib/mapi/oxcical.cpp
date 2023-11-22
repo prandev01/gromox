@@ -3347,6 +3347,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	PROPID_ARRAY propids;
 	APPOINTMENT_RECUR_PAT apprecurr;
 	
+	mlog(LV_NOTICE, "derick-debug1::oxcical_export_internal");
 	auto num = pmsg->proplist.get<const uint32_t>(PR_MESSAGE_LOCALE_ID);
 	auto planguage = num != nullptr ? lcid_to_ltag(*num) : nullptr;
 	auto str = pmsg->proplist.get<const char>(PR_MESSAGE_CLASS);
