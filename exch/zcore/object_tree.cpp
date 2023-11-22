@@ -179,7 +179,7 @@ object_node::~object_node()
 		it's an element of pprof_set */
 		break;
 	case zs_objtype::icsdownctx:
-		mlog(LV_NOTICE, "derick-debug1::zs_objtype::icsdownctx");
+		mlog(LV_NOTICE, "derick-debug1::zs_objtype::icsdownctx heyhey");
 		delete static_cast<icsdownctx_object *>(pobject);
 		break;
 	case zs_objtype::icsupctx:

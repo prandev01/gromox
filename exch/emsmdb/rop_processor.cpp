@@ -53,7 +53,6 @@ unsigned int emsmdb_pvt_folder_softdel, emsmdb_rop_chaining;
 
 std::unique_ptr<LOGMAP> rop_processor_create_logmap() try
 {
-	mlog(LV_NOTICE, "derick-debug1::rop_processor_create_logmap");
 	return std::make_unique<LOGMAP>();
 } catch (const std::bad_alloc &) {
 	return nullptr;
@@ -63,7 +62,6 @@ object_node::object_node(object_node &&o) noexcept :
 	handle(std::move(o.handle)),
 	type(std::move(o.type)), pobject(std::move(o.pobject))
 {
-	mlog(LV_NOTICE, "derick-debug1::object_node");
 	o.handle = 0;
 	o.type = ems_objtype::none;
 	o.pobject = nullptr;
@@ -71,7 +69,6 @@ object_node::object_node(object_node &&o) noexcept :
 
 void object_node::clear() noexcept
 {
-	mlog(LV_NOTICE, "derick-debug1::object_node::clear");
 	switch (type) {
 	case ems_objtype::logon: {
 		auto logon = static_cast<logon_object *>(pobject);
@@ -124,7 +121,6 @@ void object_node::clear() noexcept
 
 void object_node::operator=(object_node &&o) noexcept
 {
-	mlog(LV_NOTICE, "derick-debug1::object_node::operator=");
 	clear();
 	type = std::move(o.type);
 	pobject = std::move(o.pobject);
@@ -136,7 +132,6 @@ int32_t rop_processor_create_logon_item(LOGMAP *plogmap,
     uint8_t logon_id, std::unique_ptr<logon_object> &&plogon) try
 {
 	/* MS-OXCROPS 3.1.4.2 */
-	mlog(LV_NOTICE, "derick-debug1::rop_processor_create_logon_item");
 	plogmap->p[logon_id] = std::make_unique<LOGON_ITEM>();
 	auto rlogon = plogon.get();
 	auto handle = rop_processor_add_object_handle(plogmap, logon_id, -1,
@@ -157,7 +152,6 @@ int32_t rop_processor_create_logon_item(LOGMAP *plogmap,
 
 static bool object_dep(ems_objtype p, ems_objtype c)
 {
-	mlog(LV_NOTICE, "derick-debug1::object_dep");
 	if (p == ems_objtype::logon)
 		/* emsmdb special */
 		return c == ems_objtype::fastdownctx || c == ems_objtype::fastupctx ||
@@ -188,7 +182,6 @@ static bool object_dep(ems_objtype p, ems_objtype c)
 
 ec_error_t aoh_to_error(int x)
 {
-	mlog(LV_NOTICE, "derick-debug1::aoh_to_error");
 	switch (x) {
 	case -EEXIST:
 	case -ESRCH:
@@ -203,7 +196,6 @@ int32_t rop_processor_add_object_handle(LOGMAP *plogmap, uint8_t logon_id,
 {
 	EMSMDB_INFO *pemsmdb_info;
 
-	mlog(LV_NOTICE, "derick-debug1::rop_processor_add_object_handle");
 	auto eiuser = znul(emsmdb_interface_get_username());
 	auto plogitem = plogmap->p[logon_id].get();
 	if (plogitem == nullptr)
@@ -258,7 +250,6 @@ int32_t rop_processor_add_object_handle(LOGMAP *plogmap, uint8_t logon_id,
 void *rop_processor_get_object(LOGMAP *plogmap, uint8_t logon_id,
     uint32_t obj_handle, ems_objtype *ptype)
 {
-	mlog(LV_NOTICE, "derick-debug1::rop_processor_get_object");
 	if (obj_handle >= INT32_MAX)
 		return NULL;
 	auto &plogitem = plogmap->p[logon_id];
@@ -275,7 +266,6 @@ void rop_processor_release_object_handle(LOGMAP *plogmap,
 	uint8_t logon_id, uint32_t obj_handle)
 {
 	EMSMDB_INFO *pemsmdb_info;
-	mlog(LV_NOTICE, "derick-debug1::rop_processor_release_object_handle");
 	if (obj_handle >= INT32_MAX)
 		return;
 	auto &plogitem = plogmap->p[logon_id];
@@ -294,7 +284,6 @@ void rop_processor_release_object_handle(LOGMAP *plogmap,
 
 logon_object *rop_processor_get_logon_object(LOGMAP *plogmap, uint8_t logon_id)
 {
-	mlog(LV_NOTICE, "derick-debug1::rop_processor_get_logon_object");
 	auto &plogitem = plogmap->p[logon_id];
 	if (plogitem == nullptr)
 		return nullptr;
@@ -307,7 +296,6 @@ logon_object *rop_processor_get_logon_object(LOGMAP *plogmap, uint8_t logon_id)
 static void *emsrop_scanwork(void *param)
 {
 	int count;
-	mlog(LV_NOTICE, "derick-debug1::emsrop_scanwork");
 
 	count = 0;
 	while (!g_notify_stop) try {
@@ -335,14 +323,12 @@ static void *emsrop_scanwork(void *param)
 
 void rop_processor_init(int average_handles, int scan_interval)
 {
-	mlog(LV_NOTICE, "derick-debug1::rop_processor_init");
 	g_average_handles = average_handles;
 	g_scan_interval = scan_interval;
 }
 
 int rop_processor_run()
 {
-	mlog(LV_NOTICE, "derick-debug1::rop_processor_run");
 	g_notify_stop = false;
 	auto ret = pthread_create4(&g_scan_id, nullptr, emsrop_scanwork, nullptr);
 	if (ret != 0) {
@@ -357,7 +343,6 @@ int rop_processor_run()
 
 void rop_processor_stop()
 {
-	mlog(LV_NOTICE, "derick-debug1::rop_processor_stop");
 	if (!g_notify_stop) {
 		g_notify_stop = true;
 		if (!pthread_equal(g_scan_id, {})) {
@@ -389,7 +374,6 @@ static ec_error_t rop_processor_execute_and_push(uint8_t *pbuff,
 	DOUBLE_LIST *pnotify_list;
 	PENDING_RESPONSE tmp_pending;
 	
-	mlog(LV_NOTICE, "derick-debug1::rop_processor_execute_and_push");
 	/* ms-oxcrpc 3.1.4.2.1.2 */
 	if (*pbuff_len > rpcext_cutoff)
 		*pbuff_len = rpcext_cutoff;
@@ -589,7 +573,6 @@ ec_error_t rop_processor_proc(uint32_t flags, const uint8_t *pin,
 	 */
 	DOUBLE_LIST response_list;
 	
-	mlog(LV_NOTICE, "derick-debug1::rop_processor_proc");
 	ext_pull.init(pin, cb_in, common_util_alloc, EXT_FLAG_UTF16);
 	switch (rop_ext_pull(ext_pull, rop_buff)) {
 	case EXT_ERR_SUCCESS:

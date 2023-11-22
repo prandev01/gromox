@@ -30,7 +30,7 @@ static BOOL message_object_set_properties_internal(message_object *, BOOL check,
 
 BOOL message_object::get_recipient_all_proptags(PROPTAG_ARRAY *pproptags)
 {
-	mlog(LV_NOTICE, "derick-debug1::message_object::get_recipient_all_proptags");		
+	mlog(LV_NOTICE, "derick-debug1::message_object::get_recipient_all_proptags heyhey");		
 	auto pmessage = this;
 	return exmdb_client::get_message_instance_rcpts_all_proptags(
 	       pmessage->pstore->get_dir(), pmessage->instance_id, pproptags);
@@ -40,7 +40,7 @@ std::unique_ptr<message_object> message_object::create(store_object *pstore,
     BOOL b_new, cpid_t cpid, uint64_t message_id, void *pparent,
     uint32_t tag_access, BOOL b_writable, std::shared_ptr<ics_state> pstate)
 {
-	mlog(LV_NOTICE, "derick-debug1::message_object::create");		
+	mlog(LV_NOTICE, "derick-debug1::message_object::create heyhey");		
 	uint64_t *pchange_num;
 	std::unique_ptr<message_object> pmessage;
 	try {
@@ -105,7 +105,7 @@ BOOL message_object::check_original_touched(BOOL *pb_touched)
 	auto pmessage = this;
 	uint64_t *pchange_num;
 	
-	mlog(LV_NOTICE, "derick-debug1::message_object::get_recipient_all_proptags");		
+	mlog(LV_NOTICE, "derick-debug1::message_object::get_recipient_all_proptags heyhey");		
 	if (pmessage->b_new) {
 		*pb_touched = FALSE;
 		return TRUE;

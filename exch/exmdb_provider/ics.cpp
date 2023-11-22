@@ -38,7 +38,7 @@ static void ics_enum_content_idset(void *vparam, uint64_t message_id)
 	auto pparam = static_cast<ENUM_PARAM *>(vparam);
 	uint64_t mid_val;
 	
-	mlog(LV_NOTICE, "derick-debug1::ics_enum_content_idset");
+	mlog(LV_NOTICE, "derick-debug1::ics_enum_content_idset heyhey");
 	if (!pparam->b_result)
 		return;
 	mid_val = rop_util_get_gc_value(message_id);
@@ -61,7 +61,7 @@ static void ics_enum_content_idset(void *vparam, uint64_t message_id)
 static ec_error_t delete_impossible_mids(const idset &given, EID_ARRAY &del)
 {
 
-mlog(LV_NOTICE, "derick-debug1::delete_impossible_mids");
+mlog(LV_NOTICE, "derick-debug1::delete_impossible_mids heyhey");
 	struct p1data {
 		const idset *given;
 		EID_ARRAY *del;
@@ -99,7 +99,7 @@ BOOL exmdb_server::get_content_sync(const char *dir,
 {
 	sqlite3 *psqlite;
 
-mlog(LV_NOTICE, "derick-debug1::get_content_sync");	
+mlog(LV_NOTICE, "derick-debug1::get_content_sync heyhey");	
 	*pfai_count = 0;
 	*pfai_total = 0;
 	*pnormal_count = 0;
@@ -494,8 +494,7 @@ static void ics_enum_hierarchy_idset(void *vparam, uint64_t folder_id)
 	auto pparam = static_cast<ENUM_PARAM *>(vparam);
 	uint16_t replid;
 	uint64_t fid_val;
-	
-	mlog(LV_NOTICE, "derick-debug1::ics_enum_hierarchy_idset");	
+
 
 	if (!pparam->b_result)
 		return;
@@ -513,7 +512,6 @@ static void ics_enum_hierarchy_idset(void *vparam, uint64_t folder_id)
 
 static void ics_enum_hierarchy_replist(void *vpar, uint16_t replid)
 {
-	mlog(LV_NOTICE, "derick-debug1::ics_enum_hierarchy_replist");	
 	auto preplids = static_cast<REPLID_ARRAY *>(vpar);
 	if (preplids->count < 1024)
 		preplids->replids[preplids->count++] = replid;
@@ -531,7 +529,6 @@ static BOOL ics_load_folder_changes(sqlite3 *psqlite, uint64_t folder_id,
 	uint32_t permission;
 	std::vector<eid_t> recurse_list;
 	
-	mlog(LV_NOTICE, "derick-debug1::ics_load_folder_changes");	
 	sqlite3_reset(pstmt);
 	sqlite3_bind_int64(pstmt, 1, folder_id);
 	while (gx_sql_step(pstmt) == SQLITE_ROW) {
@@ -579,7 +576,6 @@ BOOL exmdb_server::get_hierarchy_sync(const char *dir,
 {
 	sqlite3 *psqlite;
 	
-	mlog(LV_NOTICE, "derick-debug1::get_hierarchy_sync");	
 	/* Setup of scratch space db */
 	if (sqlite3_open_v2(":memory:", &psqlite,
 	    SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE, nullptr) != SQLITE_OK)

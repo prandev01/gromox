@@ -15,7 +15,6 @@ using namespace gromox;
 std::unique_ptr<icsupctx_object> icsupctx_object::create(logon_object *plogon,
     folder_object *pfolder, uint8_t sync_type)
 {
-	mlog(LV_NOTICE, "derick-debug1::icsupctx_object::create");
 	int state_type = sync_type == SYNC_TYPE_CONTENTS ? ICS_STATE_CONTENTS_UP : ICS_STATE_HIERARCHY_UP;
 	std::unique_ptr<icsupctx_object> pctx;
 	try {
@@ -34,7 +33,6 @@ std::unique_ptr<icsupctx_object> icsupctx_object::create(logon_object *plogon,
 
 BOOL icsupctx_object::begin_state_stream(uint32_t new_state_prop)
 {
-	mlog(LV_NOTICE, "derick-debug1::icsupctx_object::begin_state_stream");		
 	auto pctx = this;
 	if (pctx->b_started)
 		return FALSE;
@@ -60,7 +58,6 @@ BOOL icsupctx_object::begin_state_stream(uint32_t new_state_prop)
 
 BOOL icsupctx_object::continue_state_stream(const BINARY *pstream_data) try
 {
-	mlog(LV_NOTICE, "derick-debug1::icsupctx_object::continue_state_stream");		
 	auto pctx = this;
 	if (pctx->b_started)
 		return FALSE;
@@ -80,7 +77,6 @@ BOOL icsupctx_object::end_state_stream()
 {
 	auto pctx = this;
 	BINARY tmp_bin;
-	mlog(LV_NOTICE, "derick-debug1::icsupctx_object::end_state_stream");		
 	if (pctx->b_started)
 		return FALSE;
 	if (pctx->state_property == 0)

@@ -21,7 +21,7 @@ using namespace gromox;
 std::unique_ptr<icsdownctx_object>
 icsdownctx_object::create(folder_object *pfolder, uint8_t sync_type)
 {
-	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::create");	
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::create heyhey");	
 	std::unique_ptr<icsdownctx_object> pctx;
 	try {
 		pctx.reset(new icsdownctx_object);
@@ -58,7 +58,7 @@ BOOL icsdownctx_object::make_content(const BINARY &pstate_bin,
 	EID_ARRAY chg_messages, read_messages, given_messages, unread_messages;
 	EID_ARRAY updated_messages, deleted_messages, nolonger_messages;
 	
-		mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::make_content");	
+		mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::make_content heyhey");	
 	*pb_changed = FALSE;
 	if (pctx->sync_type != SYNC_TYPE_CONTENTS)
 		return FALSE;
@@ -138,7 +138,6 @@ BOOL icsdownctx_object::make_hierarchy(const BINARY &state,
 	EID_ARRAY given_folders;
 	EID_ARRAY deleted_folders;
 	
-	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::make_hierarchy");	
 	*pb_changed = FALSE;
 	if (pctx->sync_type != SYNC_TYPE_HIERARCHY)
 		return FALSE;
@@ -183,7 +182,7 @@ BOOL icsdownctx_object::make_hierarchy(const BINARY &state,
 
 BINARY *icsdownctx_object::get_state()
 {
-	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::get_state");	
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::get_state heyhey");	
 	auto pctx = this;
 	if (NULL != pctx->pgiven_eids && NULL != pctx->pchg_eids
 		&& pctx->eid_pos >= pctx->pchg_eids->count && NULL ==
@@ -219,7 +218,7 @@ BINARY *icsdownctx_object::get_state()
 
 icsdownctx_object::~icsdownctx_object()
 {
-	mlog(LV_NOTICE, "derick-debug1::~icsdownctx_object");	
+	mlog(LV_NOTICE, "derick-debug1::~icsdownctx_object heyhey1");	
 	auto pctx = this;
 	if (pctx->pgiven_eids != nullptr)
 		eid_array_free(pctx->pgiven_eids);
@@ -243,7 +242,7 @@ BOOL icsdownctx_object::sync_message_change(BOOL *pb_found, BOOL *pb_new,
 	auto pctx = this;
 	void *pvalue;
 	uint64_t message_id;
-	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::sync_message_change");	
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::sync_message_change heyhey");	
 	if (pctx->sync_type != SYNC_TYPE_CONTENTS)
 		return FALSE;
 	if (NULL == pctx->pchg_eids || NULL == pctx->pupdated_eids) {
@@ -284,7 +283,6 @@ BOOL icsdownctx_object::sync_message_change(BOOL *pb_found, BOOL *pb_new,
 BOOL icsdownctx_object::sync_folder_change(BOOL *pb_found,
     TPROPVAL_ARRAY *pproplist)
 {
-	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::sync_folder_change");	
 	auto pctx = this;
 	PROPTAG_ARRAY proptags;
 	uint32_t proptag_buff[6];
@@ -366,7 +364,7 @@ BOOL icsdownctx_object::sync_deletions(uint32_t flags, BINARY_ARRAY *pbins)
 {
 	auto pctx = this;
 	
-	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::sync_deletions");	
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::sync_deletions heyhey");	
 	if (!(flags & SYNC_SOFT_DELETE)) {
 		if (NULL == pctx->pdeleted_eids) {
 			pbins->count = 0;
@@ -430,7 +428,7 @@ BOOL icsdownctx_object::sync_deletions(uint32_t flags, BINARY_ARRAY *pbins)
 BOOL icsdownctx_object::sync_readstates(STATE_ARRAY *pstates)
 {
 	auto pctx = this;
-mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::sync_readstates");		
+mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::sync_readstates heyhey");		
 	if (pctx->sync_type != SYNC_TYPE_CONTENTS)
 		return FALSE;
 	if (pctx->pread_messages == nullptr || pctx->punread_messages == nullptr) {

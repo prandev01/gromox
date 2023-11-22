@@ -32,7 +32,7 @@ static BOOL message_object_get_recipient_all_proptags(message_object *pmessage,
     PROPTAG_ARRAY *pproptags)
 {
 	PROPTAG_ARRAY tmp_proptags;
-mlog(LV_NOTICE, "derick-debug1::message_object_get_recipient_all_proptags");			
+	
 	if (!exmdb_client::get_message_instance_rcpts_all_proptags(pmessage->plogon->get_dir(),
 	    pmessage->instance_id, &tmp_proptags))
 		return FALSE;
@@ -82,7 +82,7 @@ std::unique_ptr<message_object> message_object::create(logon_object *plogon,
 	uint64_t *pchange_num;
 	PROPTAG_ARRAY tmp_columns;
 	std::unique_ptr<message_object> pmessage;
-	mlog(LV_NOTICE, "derick-debug1::message_object_get_recipient_all_proptags");			
+	
 	try {
 		pmessage.reset(new message_object);
 	} catch (const std::bad_alloc &) {

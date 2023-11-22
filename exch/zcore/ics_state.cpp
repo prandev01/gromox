@@ -21,7 +21,7 @@ static void ics_state_clear(ICS_STATE *pstate)
 
 static BOOL ics_state_init(ICS_STATE *pstate)
 {
-	mlog(LV_NOTICE, "derick-debug1::ics_state_init");
+	mlog(LV_NOTICE, "derick-debug1::ics_state_init heyhey");
 	pstate->pgiven = idset::create(true, REPL_TYPE_ID);
 	if (pstate->pgiven == nullptr)
 		return FALSE;
@@ -41,7 +41,7 @@ static BOOL ics_state_init(ICS_STATE *pstate)
 
 std::unique_ptr<ics_state> ics_state::create(uint8_t type) try
 {
-	mlog(LV_NOTICE, "derick-debug1::create");
+	mlog(LV_NOTICE, "derick-debug1::create heyhey");
 	auto pstate = std::make_unique<ics_state>(type);
 	if (!ics_state_init(pstate.get()))
 		return NULL;
@@ -52,7 +52,6 @@ std::unique_ptr<ics_state> ics_state::create(uint8_t type) try
 
 std::shared_ptr<ics_state> ics_state::create_shared(uint8_t type) try
 {
-	mlog(LV_NOTICE, "derick-debug1::ics_state::create_shared");	
 	auto pstate = std::make_shared<ics_state>(type);
 	if (!ics_state_init(pstate.get()))
 		return NULL;
@@ -63,7 +62,7 @@ std::shared_ptr<ics_state> ics_state::create_shared(uint8_t type) try
 
 BINARY *ics_state::serialize()
 {
-	mlog(LV_NOTICE, "derick-debug1::ics_state::serialize");	
+	mlog(LV_NOTICE, "derick-debug1::ics_state::serialize heyhey1");	
 	struct mdel {
 		void operator()(BINARY *x) const { rop_util_free_binary(x); }
 		void operator()(TPROPVAL_ARRAY *x) const { tpropval_array_free(x); }
@@ -126,7 +125,7 @@ BOOL ics_state::deserialize(const BINARY &bin)
 	EXT_PULL ext_pull;
 	TPROPVAL_ARRAY propvals;
 	
-	mlog(LV_NOTICE, "derick-debug1::ics_state::deserialize");	
+	mlog(LV_NOTICE, "derick-debug1::ics_state::deserialize heyhey");	
 	ics_state_clear(pstate);
 	ics_state_init(pstate);
 	if (pbin->cb <= 16)
