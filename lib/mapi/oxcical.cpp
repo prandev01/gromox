@@ -722,8 +722,8 @@ static BOOL oxcical_parse_recipients(const ical_component &main_ev,
 	if (pmessage_class == nullptr)
 		pmessage_class = "IPM.Note";
 	/* ignore ATTENDEE when METHOD is "PUBLIC" */
-	if (strcasecmp(pmessage_class, "IPM.Appointment") == 0)
-		return TRUE;
+	// if (strcasecmp(pmessage_class, "IPM.Appointment") == 0)
+	// 	return TRUE;
 	prcpts = tarray_set_init();
 	if (prcpts == nullptr)
 		return FALSE;
@@ -1988,8 +1988,8 @@ static const char *oxcical_import_internal(const char *str_zone, const char *met
 	namemap phash;
 	if (b_proposal && !oxcical_parse_proposal(phash, &last_propid, pmsg))
 		return "E-2190: oxcical_parse_proposal returned an unspecified error";
-	if (!oxcical_parse_categories(*pmain_event, phash, &last_propid, pmsg))
-		return "E-2191: oxcical_parse_categories returned an unspecified error";
+	// if (!oxcical_parse_categories(*pmain_event, phash, &last_propid, pmsg))
+	// 	return "E-2191: oxcical_parse_categories returned an unspecified error";
 	if (!oxcical_parse_class(*pmain_event, pmsg))
 		return "E-2192: oxcical_parse_class returned an unspecified error";
 	if (!oxcical_parse_body(*pmain_event, method, pmsg))
