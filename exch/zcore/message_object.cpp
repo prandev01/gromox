@@ -473,17 +473,17 @@ BOOL message_object::write_message(const MESSAGE_CONTENT *pmsgctnt)
 	mlog(LV_NOTICE, "derick-debug1::message_object::write_message");
 	msgctnt = *pmsgctnt;
 
-	TPROPVAL_ARRAY* parray = &msgctnt.proplist;
-	for (auto i =0; i<parray->count; i++) {
-		mlog(LV_NOTICE, "derick-debug1::PROPS %d", parray->ppropval[i].proptag);
-	}
+	// TPROPVAL_ARRAY* parray = &msgctnt.proplist;
+	// for (auto i =0; i<parray->count; i++) {
+	// 	mlog(LV_NOTICE, "derick-debug1::PROPS %d", parray->ppropval[i].proptag);
+	// }
 	msgctnt.proplist.ppropval = cu_alloc<TAGGED_PROPVAL>(pmsgctnt->proplist.count);
 	if (msgctnt.proplist.ppropval == nullptr)
 		return FALSE;
 	memcpy(msgctnt.proplist.ppropval, pmsgctnt->proplist.ppropval,
 				sizeof(TAGGED_PROPVAL)*pmsgctnt->proplist.count);
-	// for (auto t : trimtags)
-	// 	common_util_remove_propvals(&msgctnt.proplist, t);
+	for (auto t : trimtags)
+		common_util_remove_propvals(&msgctnt.proplist, t);
 	if (!exmdb_client::clear_message_instance(pmessage->pstore->get_dir(),
 	    pmessage->instance_id))
 		return FALSE;
@@ -494,6 +494,8 @@ BOOL message_object::write_message(const MESSAGE_CONTENT *pmsgctnt)
 	proptag_array_clear(pmessage->premoved_proptags);
 	pmessage->b_new = TRUE;
 	pmessage->b_touched = TRUE;
+
+mlog(LV_NOTICE, "derick-debug1::message_object::write_message - true");
 	return TRUE;
 }
 
