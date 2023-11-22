@@ -21,7 +21,7 @@ using namespace gromox;
 std::unique_ptr<icsdownctx_object>
 icsdownctx_object::create(folder_object *pfolder, uint8_t sync_type)
 {
-	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::create heyhey");	
+	mlog(LV_NOTICE, "derick-debug1::zcore-icsdownctx_object::create heyhey1");	
 	std::unique_ptr<icsdownctx_object> pctx;
 	try {
 		pctx.reset(new icsdownctx_object);
@@ -242,7 +242,7 @@ BOOL icsdownctx_object::sync_message_change(BOOL *pb_found, BOOL *pb_new,
 	auto pctx = this;
 	void *pvalue;
 	uint64_t message_id;
-	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::sync_message_change heyhey");	
+	// mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::sync_message_change heyhey");	
 	if (pctx->sync_type != SYNC_TYPE_CONTENTS)
 		return FALSE;
 	if (NULL == pctx->pchg_eids || NULL == pctx->pupdated_eids) {

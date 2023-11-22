@@ -4161,7 +4161,7 @@ ec_error_t zs_syncmessagechange(GUID hsession, uint32_t hctx,
 {
 	BOOL b_found;
 	zs_objtype mapi_type;
-	mlog(LV_NOTICE, "derick-debug1::zs_syncmessagechange heyhey");
+	// mlog(LV_NOTICE, "derick-debug1::zs_syncmessagechange heyhey");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;

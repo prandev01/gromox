@@ -2002,6 +2002,7 @@ message_ptr cu_ical_to_message(store_object *pstore, const BINARY *pical_bin) tr
 	ICAL ical;
 	char tmzone[64];
 	
+	mlog(LV_NOTICE, "derick-debug::cu_ical_to_message heyhey");
 	auto pinfo = zs_get_info();
 	if (!system_services_get_timezone(pinfo->get_username(), tmzone,
 	    std::size(tmzone)) || tmzone[0] == '\0')
