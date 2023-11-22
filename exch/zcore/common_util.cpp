@@ -1974,6 +1974,7 @@ BOOL common_util_message_to_ical(store_object *pstore, uint64_t message_id,
 	char tmp_buff[1024*1024];
 	MESSAGE_CONTENT *pmsgctnt;
 	
+	mlog(LV_NOTICE, "derick-debug1::common_util_message_to_ical heyhey");
 	auto pinfo = zs_get_info();
 	cpid_t cpid = pinfo == nullptr ? CP_UTF8 : pinfo->cpid;
 	if (!exmdb_client::read_message(pstore->get_dir(), nullptr, cpid,

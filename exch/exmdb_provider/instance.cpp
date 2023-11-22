@@ -2583,6 +2583,8 @@ BOOL exmdb_server::get_message_instance_rcpts_all_proptags(const char *dir,
     uint32_t instance_id, PROPTAG_ARRAY *pproptags)
 {
 	TARRAY_SET *prcpts;
+
+	mlog(LV_NOTICE, "derick-debug1::exmdb_server::get_message_instance_rcpts_all_proptags");
 	
 	auto pdb = db_engine_get_db(dir);
 	if (pdb == nullptr || pdb->psqlite == nullptr)

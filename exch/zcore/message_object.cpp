@@ -30,7 +30,7 @@ static BOOL message_object_set_properties_internal(message_object *, BOOL check,
 
 BOOL message_object::get_recipient_all_proptags(PROPTAG_ARRAY *pproptags)
 {
-	mlog(LV_NOTICE, "derick-debug1::message_object::get_recipient_all_proptags heyhey");		
+	mlog(LV_NOTICE, "derick-debug1::message_object::get_recipient_all_proptags heyhey1");		
 	auto pmessage = this;
 	return exmdb_client::get_message_instance_rcpts_all_proptags(
 	       pmessage->pstore->get_dir(), pmessage->instance_id, pproptags);
@@ -105,7 +105,7 @@ BOOL message_object::check_original_touched(BOOL *pb_touched)
 	auto pmessage = this;
 	uint64_t *pchange_num;
 	
-	mlog(LV_NOTICE, "derick-debug1::message_object::get_recipient_all_proptags heyhey");		
+	mlog(LV_NOTICE, "derick-debug1::message_object::check_original_touched heyhey");		
 	if (pmessage->b_new) {
 		*pb_touched = FALSE;
 		return TRUE;
