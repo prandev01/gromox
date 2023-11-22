@@ -722,8 +722,8 @@ static BOOL oxcical_parse_recipients(const ical_component &main_ev,
 	if (pmessage_class == nullptr)
 		pmessage_class = "IPM.Note";
 	/* ignore ATTENDEE when METHOD is "PUBLIC" */
-	// if (strcasecmp(pmessage_class, "IPM.Appointment") == 0)
-	// 	return TRUE;
+	if (strcasecmp(pmessage_class, "IPM.Appointment") == 0)
+		return TRUE;
 	prcpts = tarray_set_init();
 	if (prcpts == nullptr)
 		return FALSE;
