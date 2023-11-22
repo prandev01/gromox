@@ -1999,6 +1999,11 @@ BOOL common_util_message_to_ical(store_object *pstore, uint64_t message_id,
 		
 	pical_bin->cb = strlen(tmp_buff);
 	pical_bin->pc = common_util_dup(tmp_buff);
+	if (pical_bin->pc != nullptr) {
+		mlog(LV_NOTICE, "derick-debug1::pical_bin->pc != nullptr");
+	} else {
+		mlog(LV_NOTICE, "derick-debug1::pical_bin->pc = nullptr");
+	}
 	return pical_bin->pc != nullptr ? TRUE : FALSE;
 } catch (const std::bad_alloc &) {
 	mlog(LV_ERR, "E-2183: ENOMEM");
