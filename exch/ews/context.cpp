@@ -714,6 +714,7 @@ void EWSContext::loadSpecial(const std::string& dir, uint64_t fid, uint64_t mid,
  */
 void EWSContext::loadSpecial(const std::string& dir, uint64_t fid, uint64_t mid, tCalendarItem& calItem, uint64_t special) const
 {
+	mlog(LV_NOTICE, "derick-debug::EWSContext::loadSpecial");
 	loadSpecial(dir, fid, mid, static_cast<tItem&>(calItem), special);
 	if (!(special & sShape::Attendees))
 		return;
