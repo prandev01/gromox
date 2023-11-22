@@ -43,6 +43,7 @@ enum {
 
 bool ics_flow_list::record_node(uint8_t func_id, const void *param) try
 {
+	mlog(LV_NOTICE, "derick-debug1::ics_flow_list::record_node");
 	emplace_back(func_id, param);
 	return true;
 } catch (const std::bad_alloc &) {
@@ -52,6 +53,7 @@ bool ics_flow_list::record_node(uint8_t func_id, const void *param) try
 
 bool ics_flow_list::record_tag(uint32_t tag)
 {
+	mlog(LV_NOTICE, "derick-debug1::ics_flow_list::record_tag");
 	static_assert(sizeof(void *) >= sizeof(tag));
 	return record_node(FUNC_ID_UINT32, reinterpret_cast<void *>(static_cast<uintptr_t>(tag)));
 }
@@ -62,6 +64,7 @@ std::unique_ptr<icsdownctx_object> icsdownctx_object::create(logon_object *plogo
 	uint32_t extra_flags, const PROPTAG_ARRAY *pproptags)
 {
 	int state_type = sync_type == SYNC_TYPE_CONTENTS ? ICS_STATE_CONTENTS_DOWN : ICS_STATE_HIERARCHY_DOWN;
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::create");
 	std::unique_ptr<icsdownctx_object> pctx;
 	try {
 		pctx.reset(new icsdownctx_object);
@@ -103,6 +106,7 @@ static BOOL icsdownctx_object_make_content(icsdownctx_object *pctx)
 	EID_ARRAY chg_messages, read_messages, given_messages, unread_messages;
 	EID_ARRAY updated_messages, deleted_messages, nolonger_messages;
 	
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_make_content");
 	if (pctx->sync_type != SYNC_TYPE_CONTENTS)
 		return FALSE;
 	if (pctx->sync_flags & SYNC_PROGRESS_MODE) {
@@ -192,6 +196,7 @@ static BOOL icsdownctx_object_make_content(icsdownctx_object *pctx)
 static void icsdownctx_object_adjust_fldchgs(FOLDER_CHANGES *pfldchgs,
     const PROPTAG_ARRAY *pproptags, bool b_exclude)
 {
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_adjust_fldchgs");
 	if (b_exclude) {
 		for (size_t i = 0; i < pfldchgs->count; ++i)
 			for (size_t j = 0; j < pproptags->count; ++j)
@@ -228,6 +233,7 @@ static BOOL icsdownctx_object_make_hierarchy(icsdownctx_object *pctx)
 	PERSISTDATA_ARRAY persistdatas;
 	TPROPVAL_ARRAY *pproplist_deletions;
 	
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_make_hierarchy");
 	if (pctx->sync_type != SYNC_TYPE_HIERARCHY)
 		return FALSE;
 	auto dir = pctx->pstream->plogon->get_dir();
@@ -501,6 +507,7 @@ static BOOL icsdownctx_object_make_hierarchy(icsdownctx_object *pctx)
 
 BOOL icsdownctx_object::make_sync()
 {
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::make_sync");
 	auto pctx = this;
 	if (pctx->b_started)
 		return FALSE;
@@ -519,6 +526,7 @@ static BOOL icsdownctx_object_extract_msgctntinfo(
 	MESSAGE_CONTENT *pmsgctnt, uint8_t extra_flags,
 	TPROPVAL_ARRAY *pchgheader, PROGRESS_MESSAGE *pprogmsg)
 {
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_extract_msgctntinfo");
 	pchgheader->ppropval = cu_alloc<TAGGED_PROPVAL>(8);
 	if (pchgheader->ppropval == nullptr)
 		return FALSE;
@@ -581,6 +589,7 @@ static BOOL icsdownctx_object_extract_msgctntinfo(
 static void icsdownctx_object_adjust_msgctnt(MESSAGE_CONTENT *pmsgctnt,
     const PROPTAG_ARRAY *pproptags, bool b_exclude)
 {
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_adjust_msgctnt");
 	if (b_exclude) {
 		for (unsigned int i = 0; i < pproptags->count; ++i) {
 			const auto tag = pproptags->pproptag[i];
@@ -621,7 +630,8 @@ static BOOL icsdownctx_object_get_changepartial(icsdownctx_object *pctx,
 	uint32_t index;
 	PROPTAG_ARRAY *pchangetags;
 	static constexpr BINARY fake_bin{};
-	
+
+mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_get_changepartial");	
 	auto pgpinfo = pctx->pstream->plogon->get_property_groupinfo(group_id);
 	if (pgpinfo == nullptr)
 		return FALSE;
@@ -720,7 +730,8 @@ static void icsdownctx_object_trim_embedded(
 	int i, j;
 	MESSAGE_CONTENT *pembedded;
 	ATTACHMENT_CONTENT *pattachment;
-	
+
+mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_trim_embedded");		
 	if (pmsgctnt->children.pattachments == nullptr)
 		return;
 	for (i=0; i<pmsgctnt->children.pattachments->count; i++) {
@@ -748,6 +759,7 @@ static void icsdownctx_object_trim_report_recipients(
 	int i;
 	ATTACHMENT_CONTENT *pattachment;
 	
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_trim_report_recipients");		
 	auto pvalue = pmsgctnt->proplist.get<const char>(PR_MESSAGE_CLASS);
 	if (pvalue != nullptr && strncasecmp(pvalue, "REPORT.IPM.Note.", 16) == 0)
 		pmsgctnt->children.prcpts = NULL;
@@ -778,6 +790,7 @@ static BOOL icsdownctx_object_write_message_change(icsdownctx_object *pctx,
 	static constexpr uint8_t fake_true = 1;
 	static constexpr uint8_t fake_false = 0;
 	
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_write_message_change");		
 	auto pinfo = emsmdb_interface_get_emsmdb_info();
 	auto dir = pctx->pstream->plogon->get_dir();
 	if (!exmdb_client::read_message(dir, pctx->pstream->plogon->readstate_user(),
@@ -955,6 +968,7 @@ static BOOL icsdownctx_object_write_deletions(icsdownctx_object *pctx)
 	TPROPVAL_ARRAY proplist;
 	TAGGED_PROPVAL tmp_propvals[2];
 	
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_write_deletions");		
 	proplist.count = 0;
 	proplist.ppropval = tmp_propvals;
 	pbin1 = NULL;
@@ -1016,6 +1030,7 @@ static BOOL icsdownctx_object_write_readstate_changes(icsdownctx_object *pctx)
 	TPROPVAL_ARRAY proplist;
 	TAGGED_PROPVAL tmp_propvals[2];
 	
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_write_readstate_changes");		
 	proplist.count = 0;
 	proplist.ppropval = tmp_propvals;
 	if (pctx->pread_messages->count > 0) {
@@ -1048,6 +1063,7 @@ static BOOL icsdownctx_object_write_readstate_changes(icsdownctx_object *pctx)
 /* only be called under content sync */
 static BOOL icsdownctx_object_write_state(icsdownctx_object *pctx)
 {
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_write_state");		
 	pctx->pstate->pseen->clear();
 	if (pctx->sync_flags & SYNC_NORMAL && pctx->last_changenum != 0 &&
 	    !pctx->pstate->pseen->append_range(1, 1,
@@ -1083,6 +1099,7 @@ static BOOL icsdownctx_object_write_state(icsdownctx_object *pctx)
 static BOOL icsdownctx_object_get_buffer_internal(icsdownctx_object *pctx,
     void *pbuff, uint16_t *plen, BOOL *pb_last)
 {
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object_get_buffer_internal");		
 	BOOL b_last;
 	uint16_t len;
 	uint16_t len1;
@@ -1163,6 +1180,7 @@ static BOOL icsdownctx_object_get_buffer_internal(icsdownctx_object *pctx,
 BOOL icsdownctx_object::get_buffer(void *pbuff, uint16_t *plen, BOOL *pb_last,
 	uint16_t *pprogress, uint16_t *ptotal)
 {
+	mlog(LV_NOTICE, "derick-debug1::icsdownctx_object::get_buffer");		
 	*pprogress = progress_steps / divisor;
 	*ptotal = total_steps / divisor;
 	if (*ptotal == 0)
@@ -1176,6 +1194,7 @@ BOOL icsdownctx_object::get_buffer(void *pbuff, uint16_t *plen, BOOL *pb_last,
 
 icsdownctx_object::~icsdownctx_object()
 {
+	mlog(LV_NOTICE, "derick-debug1::~icsdownctx_object");		
 	auto pctx = this;
 	if (pctx->pprogtotal != nullptr)
 		free(pctx->pprogtotal);
@@ -1196,6 +1215,7 @@ icsdownctx_object::~icsdownctx_object()
 
 BOOL icsdownctx_object::begin_state_stream(uint32_t new_state_prop)
 {
+	mlog(LV_NOTICE, "derick-debug1::begin_state_stream");		
 	auto pctx = this;
 	if (pctx->b_started)
 		return FALSE;
@@ -1221,6 +1241,7 @@ BOOL icsdownctx_object::begin_state_stream(uint32_t new_state_prop)
 
 BOOL icsdownctx_object::continue_state_stream(const BINARY *pstream_data) try
 {
+	mlog(LV_NOTICE, "derick-debug1::continue_state_stream");		
 	auto pctx = this;
 	if (pctx->b_started)
 		return FALSE;
@@ -1242,6 +1263,7 @@ BOOL icsdownctx_object::end_state_stream()
 	auto pctx = this;
 	BINARY tmp_bin;
 	
+	mlog(LV_NOTICE, "derick-debug1::end_state_stream");		
 	if (pctx->b_started)
 		return FALSE;
 	if (pctx->state_property == 0)

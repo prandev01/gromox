@@ -41,6 +41,7 @@ static EID_ARRAY *oxcfxics_load_folder_messages(logon_object *plogon,
 	RESTRICTION_PROPERTY res_prop;
 	uint8_t tmp_associated = !!b_fai;
 	
+	mlog(LV_NOTICE, "derick-debug1::oxcfxics_load_folder_messages");
 	restriction.rt = RES_PROPERTY;
 	restriction.pres = &res_prop;
 	res_prop.relop = RELOP_EQ;
@@ -93,6 +94,7 @@ oxcfxics_load_folder_content(logon_object *plogon, uint64_t folder_id,
 	TPROPVAL_ARRAY tmp_propvals;
 	auto username = plogon->eff_user();
 	
+	mlog(LV_NOTICE, "derick-debug1::oxcfxics_load_folder_content");
 	if (username != STORE_OWNER_GRANTED) {
 		if (!exmdb_client::get_folder_perm(plogon->get_dir(),
 		    folder_id, username, &permission))
@@ -181,6 +183,7 @@ ec_error_t rop_fasttransferdestconfigure(uint8_t source_operation, uint8_t flags
 	PROPTAG_ARRAY tmp_proptags;
 	TPROPVAL_ARRAY tmp_propvals;
 	
+	mlog(LV_NOTICE, "derick-debug1::rop_fasttransferdestconfigure");
 	if (flags & ~FAST_DEST_CONFIG_FLAG_MOVE)
 		return ecInvalidParam;
 	auto plogon = rop_processor_get_logon_object(plogmap, logon_id);
@@ -266,6 +269,7 @@ ec_error_t rop_fasttransferdestputbuffer(const BINARY *ptransfer_data,
 {
 	ems_objtype object_type;
 	
+	mlog(LV_NOTICE, "derick-debug1::rop_fasttransferdestputbuffer");
 	*ptransfer_status = 0;
 	*pin_progress_count = 0;
 	*ptotal_step_count = 1;
@@ -293,6 +297,7 @@ ec_error_t rop_fasttransfersourcegetbuffer(uint16_t buffer_size,
 	ems_objtype object_type;
 	uint16_t max_rop;
 	
+	mlog(LV_NOTICE, "derick-debug1::rop_fasttransfersourcegetbuffer");
 	*ptransfer_status = TRANSFER_STATUS_ERROR;
 	*pin_progress_count = 0;
 	*ptotal_step_count = 1;
@@ -338,6 +343,7 @@ ec_error_t rop_fasttransfersourcegetbuffer(uint16_t buffer_size,
 
 static bool send_options_ok(uint32_t f)
 {
+	mlog(LV_NOTICE, "derick-debug1::send_options_ok");
 	if (f & ~(SEND_OPTIONS_UNICODE | SEND_OPTIONS_USECPID |
 	    SEND_OPTIONS_RECOVERMODE | SEND_OPTIONS_FORCEUNICODE |
 	    SEND_OPTIONS_PARTIAL | SEND_OPTIONS_RESERVED1 | SEND_OPTIONS_RESERVED2))
@@ -352,7 +358,7 @@ ec_error_t rop_fasttransfersourcecopyfolder(uint8_t flags, uint8_t send_options,
     LOGMAP *plogmap, uint8_t logon_id, uint32_t hin, uint32_t *phout)
 {
 	ems_objtype object_type;
-	
+	mlog(LV_NOTICE, "derick-debug1::rop_fasttransfersourcecopyfolder");
 	if (!send_options_ok(send_options))
 		return ecInvalidParam;
 	auto plogon = rop_processor_get_logon_object(plogmap, logon_id);
@@ -390,7 +396,8 @@ ec_error_t rop_fasttransfersourcecopymessages(const LONGLONG_ARRAY *pmessage_ids
 	ems_objtype object_type;
 	EID_ARRAY *pmids;
 	uint32_t permission;
-	
+
+	mlog(LV_NOTICE, "derick-debug1::rop_fasttransfersourcecopyfolder");	
 	if (!send_options_ok(send_options))
 		return ecInvalidParam;
 	/* we ignore the FAST_COPY_MESSAGE_FLAG_MOVE
@@ -453,6 +460,7 @@ ec_error_t rop_fasttransfersourcecopyto(uint8_t level, uint32_t flags,
 	MESSAGE_CONTENT msgctnt;
 	ATTACHMENT_CONTENT attctnt;
 	
+	mlog(LV_NOTICE, "derick-debug1::rop_fasttransfersourcecopyto");	
 	if (!send_options_ok(send_options))
 		return ecInvalidParam;
 	/* just like exchange 2010 or later */
@@ -562,6 +570,7 @@ ec_error_t rop_fasttransfersourcecopyproperties(uint8_t level, uint8_t flags,
 	MESSAGE_CONTENT msgctnt;
 	ATTACHMENT_CONTENT attctnt;
 	
+	mlog(LV_NOTICE, "derick-debug1::rop_fasttransfersourcecopyproperties");	
 	if (!send_options_ok(send_options))
 		return ecInvalidParam;
 	/* just like exchange 2010 or later */
@@ -679,6 +688,7 @@ ec_error_t rop_syncconfigure(uint8_t sync_type, uint8_t send_options,
 	ems_objtype object_type;
 	uint32_t permission;
 	
+	mlog(LV_NOTICE, "derick-debug1::rop_syncconfigure");	
 	if (SYNC_TYPE_CONTENTS != sync_type &&
 	    sync_type != SYNC_TYPE_HIERARCHY)
 		return ecInvalidParam;
@@ -752,6 +762,7 @@ static ec_error_t simc_otherstore(LOGMAP *logmap, uint8_t logon_id,
     const TPROPVAL_ARRAY *props, uint64_t *msg_idp,
     uint32_t hnd_in, uint32_t *hnd_out)
 {
+mlog(LV_NOTICE, "derick-debug1::simc_otherstore");	
 	auto logon = rop_processor_get_logon_object(logmap, logon_id);
 	if (logon == nullptr)
 		return ecError;
@@ -841,6 +852,7 @@ ec_error_t rop_syncimportmessagechange(uint8_t import_flags,
 	PROBLEM_ARRAY tmp_problems;
 	TPROPVAL_ARRAY tmp_propvals;
 	
+	mlog(LV_NOTICE, "derick-debug1::rop_syncimportmessagechange");	
 	if (import_flags & (~(IMPORT_FLAG_ASSOCIATED | IMPORT_FLAG_FAILONCONFLICT)))
 		return ecInvalidParam;
 	if (4 != ppropvals->count ||
@@ -980,6 +992,7 @@ ec_error_t rop_syncimportreadstatechanges(uint16_t count,
 	PROPTAG_ARRAY tmp_proptags;
 	TPROPVAL_ARRAY tmp_propvals;
 	
+mlog(LV_NOTICE, "derick-debug1::rop_syncimportreadstatechanges");	
 	auto plogon = rop_processor_get_logon_object(plogmap, logon_id);
 	if (plogon == nullptr)
 		return ecError;
@@ -1060,6 +1073,7 @@ ec_error_t rop_syncimporthierarchychange(const TPROPVAL_ARRAY *phichyvals,
 	PROBLEM_ARRAY tmp_problems;
 	TPROPVAL_ARRAY tmp_propvals;
 	
+	mlog(LV_NOTICE, "derick-debug1::rop_syncimporthierarchychange");	
 	if (6 != phichyvals->count ||
 	    phichyvals->ppropval[0].proptag != PR_PARENT_SOURCE_KEY ||
 	    phichyvals->ppropval[1].proptag != PR_SOURCE_KEY ||
@@ -1278,6 +1292,7 @@ ec_error_t rop_syncimportdeletes(uint8_t flags, const TPROPVAL_ARRAY *ppropvals,
 	uint32_t permission;
 	EID_ARRAY message_ids;
 	
+	mlog(LV_NOTICE, "derick-debug1::rop_syncimportdeletes");	
 	if (ppropvals->count != 1 ||
 	    ppropvals->ppropval[0].proptag != PROP_TAG(PT_MV_BINARY, 0)) {
 		mlog(LV_WARN, "W-2150: importdeletes expected proptag 00001102h, but got tag %xh",
@@ -1435,6 +1450,7 @@ ec_error_t rop_syncimportmessagemove(const BINARY *psrc_folder_id,
 	uint32_t permission;
 	TAGGED_PROPVAL tmp_propval;
 	
+	mlog(LV_NOTICE, "derick-debug1::rop_syncimportmessagemove");	
 	if (22 != psrc_folder_id->cb ||
 		22 != psrc_message_id->cb ||
 	    pdst_message_id->cb != 22)
@@ -1542,6 +1558,7 @@ ec_error_t rop_syncopencollector(uint8_t is_content_collector, LOGMAP *plogmap,
 {
 	ems_objtype object_type;
 	
+	mlog(LV_NOTICE, "derick-debug1::rop_syncopencollector");	
 	auto plogon = rop_processor_get_logon_object(plogmap, logon_id);
 	if (plogon == nullptr)
 		return ecError;
@@ -1566,6 +1583,7 @@ ec_error_t rop_syncgettransferstate(LOGMAP *plogmap, uint8_t logon_id,
 	ems_objtype object_type;
 	ICS_STATE *pstate;
 
+mlog(LV_NOTICE, "derick-debug1::rop_syncgettransferstate");	
 	auto plogon = rop_processor_get_logon_object(plogmap, logon_id);
 	if (plogon == nullptr)
 		return ecError;
@@ -1597,6 +1615,7 @@ ec_error_t rop_syncuploadstatestreambegin(uint32_t proptag_state,
     uint32_t buffer_size, LOGMAP *plogmap, uint8_t logon_id, uint32_t hin)
 {
 	ems_objtype object_type;
+	mlog(LV_NOTICE, "derick-debug1::rop_syncuploadstatestreambegin");	
 	auto pctx = rop_processor_get_object(plogmap, logon_id, hin, &object_type);
 	if (pctx == nullptr)
 		return ecNullObject;
@@ -1616,6 +1635,7 @@ ec_error_t rop_syncuploadstatestreamcontinue(const BINARY *pstream_data,
     LOGMAP *plogmap, uint8_t logon_id, uint32_t hin)
 {
 	ems_objtype object_type;
+	mlog(LV_NOTICE, "derick-debug1::rop_syncuploadstatestreamcontinue");	
 	auto pctx = rop_processor_get_object(plogmap, logon_id, hin, &object_type);
 	if (pctx == nullptr)
 		return ecNullObject;
@@ -1635,6 +1655,7 @@ ec_error_t rop_syncuploadstatestreamend(LOGMAP *plogmap,
     uint8_t logon_id, uint32_t hin)
 {
 	ems_objtype object_type;
+	mlog(LV_NOTICE, "derick-debug1::rop_syncuploadstatestreamend");	
 	auto pctx = rop_processor_get_object(plogmap, logon_id, hin, &object_type);
 	if (pctx == nullptr)
 		return ecNullObject;
@@ -1661,6 +1682,7 @@ ec_error_t rop_getlocalreplicaids(uint32_t count, GUID *pguid,
     GLOBCNT *pglobal_count, LOGMAP *plogmap, uint8_t logon_id, uint32_t hin)
 {
 	ems_objtype object_type;
+	mlog(LV_NOTICE, "derick-debug1::rop_getlocalreplicaids");	
 	uint64_t begin_eid;
 	auto plogon = rop_proc_get_obj<logon_object>(plogmap, logon_id, hin, &object_type);
 	if (plogon == nullptr)

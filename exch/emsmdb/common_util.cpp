@@ -1340,6 +1340,7 @@ BOOL common_util_save_message_ics(logon_object *plogon,
 	TAGGED_PROPVAL propval_buff[2];
 	auto dir = plogon->get_dir();
 	
+	mlog(LV_NOTICE, "derick-debug1::common_util_save_message_ics");
 	if (!exmdb_client::allocate_cn(dir, &change_num))
 		return FALSE;	
 	tmp_propvals.count = 2;

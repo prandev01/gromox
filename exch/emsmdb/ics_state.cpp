@@ -9,6 +9,7 @@
 
 static ics_state *ics_state_init(ics_state *pstate, logon_object *plogon, int type)
 {
+	mlog(LV_NOTICE, "derick-debug1::emsmdb-ics_state_init");
 	pstate->pseen = idset::create(true, REPL_TYPE_GUID);
 	if (pstate->pseen == nullptr)
 		return NULL;
@@ -129,6 +130,7 @@ BOOL ics_state::append_idset(uint32_t state_property, std::unique_ptr<idset> &&p
 
 TPROPVAL_ARRAY *ics_state::serialize()
 {
+	mlog(LV_NOTICE, "derick-debug1::ics_state::serialize");
 	struct mdel {
 		inline void operator()(BINARY *x) const { rop_util_free_binary(x); }
 		inline void operator()(TPROPVAL_ARRAY *x) const { tpropval_array_free(x); }

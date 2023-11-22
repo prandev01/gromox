@@ -13,7 +13,7 @@ using namespace gromox;
 std::unique_ptr<icsupctx_object>
 icsupctx_object::create(folder_object *pfolder, uint8_t sync_type)
 {
-	mlog(LV_NOTICE, "derick-debug::icsupctx_object");
+	mlog(LV_NOTICE, "derick-debug1::icsupctx_object");
 	std::unique_ptr<icsupctx_object> pctx;
 	try {
 		pctx.reset(new icsupctx_object);

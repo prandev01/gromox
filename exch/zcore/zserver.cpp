@@ -4064,6 +4064,8 @@ ec_error_t zs_savechanges(GUID hsession, uint32_t hobject)
 ec_error_t zs_hierarchysync(GUID hsession, uint32_t hfolder, uint32_t *phobject)
 {
 	zs_objtype mapi_type;
+
+	mlog(LV_NOTICE, "derick-debug1::zs_hierarchysync");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4088,6 +4090,7 @@ ec_error_t zs_hierarchysync(GUID hsession, uint32_t hfolder, uint32_t *phobject)
 ec_error_t zs_contentsync(GUID hsession, uint32_t hfolder, uint32_t *phobject)
 {
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_contentsync");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4114,6 +4117,7 @@ ec_error_t zs_configsync(GUID hsession, uint32_t hctx, uint32_t flags,
     uint32_t *pcount)
 {
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_configsync");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4137,6 +4141,7 @@ ec_error_t zs_configsync(GUID hsession, uint32_t hctx, uint32_t flags,
 ec_error_t zs_statesync(GUID hsession, uint32_t hctx, BINARY *pstate)
 {
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_statesync");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4157,6 +4162,7 @@ ec_error_t zs_syncmessagechange(GUID hsession, uint32_t hctx,
 {
 	BOOL b_found;
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_syncmessagechange");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4177,6 +4183,7 @@ ec_error_t zs_syncfolderchange(GUID hsession,
 {
 	BOOL b_found;
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_syncfolderchange");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4194,6 +4201,7 @@ ec_error_t zs_syncreadstatechanges(GUID hsession, uint32_t hctx,
     STATE_ARRAY *pstates)
 {
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_syncreadstatechanges");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4209,6 +4217,7 @@ ec_error_t zs_syncdeletions(GUID hsession,
 	uint32_t hctx, uint32_t flags, BINARY_ARRAY *pbins)
 {
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_syncdeletions");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4224,6 +4233,7 @@ ec_error_t zs_hierarchyimport(GUID hsession,
 	uint32_t hfolder, uint32_t *phobject)
 {
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_hierarchyimport");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4248,6 +4258,7 @@ ec_error_t zs_hierarchyimport(GUID hsession,
 ec_error_t zs_contentimport(GUID hsession, uint32_t hfolder, uint32_t *phobject)
 {
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_contentimport");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4273,6 +4284,7 @@ ec_error_t zs_configimport(GUID hsession,
 	uint32_t hctx, uint8_t sync_type, const BINARY *pstate)
 {
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_configimport");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4287,6 +4299,7 @@ ec_error_t zs_configimport(GUID hsession,
 ec_error_t zs_stateimport(GUID hsession, uint32_t hctx, BINARY *pstate)
 {
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_stateimport");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4312,7 +4325,7 @@ ec_error_t zs_importmessage(GUID hsession, uint32_t hctx,
 	zs_objtype mapi_type;
 	uint64_t message_id;
 	uint32_t permission = rightsNone, tag_access = 0;
-	
+	mlog(LV_NOTICE, "derick-debug1::zs_importmessage");
 	auto pbool = pproplist->get<const uint8_t>(PR_ASSOCIATED);
 	if (pbool != nullptr) {
 		b_fai = *pbool != 0 ? TRUE : false;
@@ -4435,6 +4448,7 @@ ec_error_t zs_importfolder(GUID hsession,
 	TAGGED_PROPVAL propval_buff[4];
 	TPROPVAL_ARRAY hierarchy_propvals;
 	
+	mlog(LV_NOTICE, "derick-debug1::zs_importfolder");
 	pproplist = &hierarchy_propvals;
 	hierarchy_propvals.count = 4;
 	hierarchy_propvals.ppropval = propval_buff;
@@ -4651,6 +4665,8 @@ ec_error_t zs_importdeletion(GUID hsession,
 	uint32_t permission;
 	EID_ARRAY message_ids;
 	
+	mlog(LV_NOTICE, "derick-debug1::zs_importdeletion");
+
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4787,7 +4803,8 @@ ec_error_t zs_importreadstates(GUID hsession,
 	uint32_t proptag_buff[2];
 	PROPTAG_ARRAY tmp_proptags;
 	TPROPVAL_ARRAY tmp_propvals;
-	
+	mlog(LV_NOTICE, "derick-debug1::zs_importreadstates");
+
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4853,7 +4870,8 @@ ec_error_t zs_getsearchcriteria(GUID hsession,
 {
 	zs_objtype mapi_type;
 	LONGLONG_ARRAY folder_ids;
-	
+	mlog(LV_NOTICE, "derick-debug1::zs_getsearchcriteria");
+
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4895,7 +4913,7 @@ ec_error_t zs_setsearchcriteria(GUID hsession, uint32_t hfolder, uint32_t flags,
 	uint32_t permission;
 	uint32_t search_status;
 	LONGLONG_ARRAY folder_ids;
-	
+	mlog(LV_NOTICE, "derick-debug1::zs_setsearchcriteria");
 	if (!(flags & (RESTART_SEARCH | STOP_SEARCH)))
 		/* make the default search_flags */
 		flags |= RESTART_SEARCH;
@@ -4957,6 +4975,7 @@ ec_error_t zs_setsearchcriteria(GUID hsession, uint32_t hfolder, uint32_t flags,
 ec_error_t zs_messagetorfc822(GUID hsession, uint32_t hmessage, BINARY *peml_bin)
 {
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_messagetorfc822");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -4972,6 +4991,7 @@ ec_error_t zs_messagetorfc822(GUID hsession, uint32_t hmessage, BINARY *peml_bin
 ec_error_t zs_rfc822tomessage(GUID hsession, uint32_t hmessage,
     uint32_t mxf_flags, /* effective-moved-from */ BINARY *peml_bin)
 {
+	mlog(LV_NOTICE, "derick-debug1::zs_rfc822tomessage");
 	zs_objtype mapi_type;
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
@@ -4989,6 +5009,7 @@ ec_error_t zs_rfc822tomessage(GUID hsession, uint32_t hmessage,
 
 ec_error_t zs_messagetoical(GUID hsession, uint32_t hmessage, BINARY *pical_bin)
 {
+	mlog(LV_NOTICE, "derick-debug1::zs_messagetoical");
 	zs_objtype mapi_type;
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
@@ -5006,6 +5027,7 @@ ec_error_t zs_icaltomessage(GUID hsession,
 	uint32_t hmessage, const BINARY *pical_bin)
 {
 	zs_objtype mapi_type;
+	mlog(LV_NOTICE, "derick-debug1::zs_icaltomessage");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -5023,6 +5045,7 @@ ec_error_t zs_icaltomessage(GUID hsession,
 ec_error_t zs_imtomessage2(GUID session, uint32_t fld_handle,
     uint32_t data_type, char *im_data, LONG_ARRAY *outhandles)
 {
+	mlog(LV_NOTICE, "derick-debug1::zs_imtomessage2");
 	auto info = zs_query_session(session);
 	if (info == nullptr)
 		return ecError;
@@ -5067,6 +5090,7 @@ ec_error_t zs_imtomessage2(GUID session, uint32_t fld_handle,
 
 ec_error_t zs_messagetovcf(GUID hsession, uint32_t hmessage, BINARY *pvcf_bin)
 {
+	mlog(LV_NOTICE, "derick-debug1::zs_messagetovcf");
 	zs_objtype mapi_type;
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
@@ -5082,6 +5106,7 @@ ec_error_t zs_messagetovcf(GUID hsession, uint32_t hmessage, BINARY *pvcf_bin)
 ec_error_t zs_vcftomessage(GUID hsession,
 	uint32_t hmessage, const BINARY *pvcf_bin)
 {
+	mlog(LV_NOTICE, "derick-debug1::zs_vcftomessage");
 	zs_objtype mapi_type;
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
@@ -5102,7 +5127,7 @@ ec_error_t zs_getuserfreebusy(GUID hsession, BINARY entryid,
 {
 	char maildir[256];
 	char username[UADDR_SIZE];
-
+	mlog(LV_NOTICE, "derick-debug1::zs_getuserfreebusy");
 	auto pinfo = zs_query_session(hsession);
 	if (pinfo == nullptr)
 		return ecError;
@@ -5146,6 +5171,7 @@ ec_error_t zs_linkmessage(GUID hsession,
 	uint32_t account_id;
 	uint32_t account_id1;
 	
+	mlog(LV_NOTICE, "derick-debug1::zs_linkmessage");
 	if (common_util_get_messaging_entryid_type(search_entryid) != EITLT_PRIVATE_FOLDER ||
 	    !cu_entryid_to_fid(search_entryid, &b_private,
 	    reinterpret_cast<int *>(&account_id), &folder_id) ||
