@@ -474,7 +474,7 @@ BOOL message_object::write_message(const MESSAGE_CONTENT *pmsgctnt)
 	msgctnt = *pmsgctnt;
 
 	TPROPVAL_ARRAY* parray = &msgctnt.proplist;
-	for (i=0; i<parray->count; i++) {
+	for (auto i=0; i<parray->count; i++) {
 		mlog(LV_NOTICE, "derick-debug1::PROPS %s", parray->ppropval[i].value_repr());
 	}
 	msgctnt.proplist.ppropval = cu_alloc<TAGGED_PROPVAL>(pmsgctnt->proplist.count);
