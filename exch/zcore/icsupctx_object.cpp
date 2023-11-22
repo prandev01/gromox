@@ -8,6 +8,7 @@
 #include "ics_state.h"
 #include "objects.hpp"
 
+using namespace gromox;
 
 std::unique_ptr<icsupctx_object>
 icsupctx_object::create(folder_object *pfolder, uint8_t sync_type)
