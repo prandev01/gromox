@@ -2476,6 +2476,7 @@ ec_error_t oxcical_import_multi(const char *str_zone, const ical &pical,
 		pvalue = piline->get_first_subvalue();
 		if (NULL != pvalue) {
 			if (0 == strcasecmp(pvalue, "PUBLISH")) {
+				mlog(LV_NOTICE, "derick-debug1::oxcical_import_multi-method - PUBLISH");
 				if (uid_list.size() > 1) {
 					if (!oxcical_import_events(str_zone,
 					    calendartype, pical,
