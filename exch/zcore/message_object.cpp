@@ -458,8 +458,8 @@ BOOL message_object::reload()
 }
 
 static constexpr uint32_t trimtags[] = {
-	PidTagMid, /*PR_DISPLAY_TO, PR_DISPLAY_CC,
-	PR_DISPLAY_BCC*/, PR_MESSAGE_SIZE, PR_HASATTACH,
+	PidTagMid, PR_DISPLAY_TO, /*PR_DISPLAY_CC,*/
+	PR_DISPLAY_BCC, PR_MESSAGE_SIZE, PR_HASATTACH,
 	PR_CHANGE_KEY, PidTagChangeNumber,
 	PR_PREDECESSOR_CHANGE_LIST,
 };
