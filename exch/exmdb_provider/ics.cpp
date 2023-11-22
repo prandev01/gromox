@@ -99,7 +99,7 @@ BOOL exmdb_server::get_content_sync(const char *dir,
 {
 	sqlite3 *psqlite;
 
-mlog(LV_NOTICE, "derick-debug1::get_content_sync heyhey");	
+	mlog(LV_NOTICE, "derick-debug1::get_content_sync heyhey");	
 	*pfai_count = 0;
 	*pfai_total = 0;
 	*pnormal_count = 0;
@@ -369,8 +369,11 @@ mlog(LV_NOTICE, "derick-debug1::get_content_sync heyhey");
 		eid_array_free(enum_param.pdeleted_eids);
 		return FALSE;
 	}
-	if (delete_impossible_mids(*pgiven, *enum_param.pdeleted_eids) != ecSuccess)
+	if (delete_impossible_mids(*pgiven, *enum_param.pdeleted_eids) != ecSuccess) {
+		mlog(LV_NOTICE, "derick-debug1::if (delete_impossible_mids(*pgiven, *enum_param.pdeleted_eids) != ecSuccess)");
 		return false;
+	}
+		
 	if (!const_cast<IDSET *>(pgiven)->enum_repl(1, &enum_param,
 	    ics_enum_content_idset)) {
 		eid_array_free(enum_param.pdeleted_eids);
