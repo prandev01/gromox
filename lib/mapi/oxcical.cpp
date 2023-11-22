@@ -3318,16 +3318,20 @@ static std::string oxcical_export_valarm(const MESSAGE_CONTENT &msg,
 	const PROPNAME_ARRAY propnames = {1, deconst(&propname)};
 	PROPID_ARRAY propids;
 
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step35");
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step36");
 	auto flag = msg.proplist.get<uint8_t>(PROP_TAG(PT_BOOLEAN, propids.ppropid[0]));
 	if (flag == nullptr || *flag == 0)
 		return {};
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step37");
 	auto com = &pical.append_comp("VALARM");
 	com->append_line("DESCRIPTION", "REMINDER");
 	propname = {MNID_ID, PSETID_COMMON, PidLidReminderDelta};
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step38");
 	auto num = msg.proplist.get<uint32_t>(PROP_TAG(PT_LONG, propids.ppropid[0]));
 	char tmp_buff[32];
 	if (num == nullptr || *num == ENDDATE_MISSING_RDELTA)
@@ -3337,6 +3341,7 @@ static std::string oxcical_export_valarm(const MESSAGE_CONTENT &msg,
 	auto line = &com->append_line("TRIGGER", tmp_buff);
 	line->append_param("RELATED", "START");
 	com->append_line("ACTION", "DISPLAY");
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step39");
 	return {};
 }
 
@@ -3361,6 +3366,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	if (method == nullptr) {
 		b_exceptional = false;
 		if (strcasecmp(str, "IPM.Appointment") == 0) {
+			mlog(LV_NOTICE, "derick-debug1::method=PUBLISH");
 			method = "PUBLISH";
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Request") == 0) {
 			method = "REQUEST";
@@ -3404,6 +3410,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	const PROPNAME_ARRAY propnames = {1, &propname};
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step1");
 	auto lnum = pmsg->proplist.get<const uint64_t>(PROP_TAG(PT_SYSTIME, propids.ppropid[0]));
 	bool has_start_time = false;
 	time_t start_time = 0, end_time = 0;
@@ -3440,6 +3447,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	propname = {MNID_ID, PSETID_APPOINTMENT, PidLidAppointmentRecur};
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step2");
 	bin = pmsg->proplist.get<BINARY>(PROP_TAG(PT_BINARY, propids.ppropid[0]));
 	if (bin != nullptr) {
 		EXT_PULL ext_pull;
@@ -3475,6 +3483,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	
 	tzid = NULL;
 	if (b_recurrence) {
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step3-1");
 		propname = {MNID_ID, PSETID_APPOINTMENT, PidLidTimeZoneStruct};
 		if (!get_propids(&propnames, &propids))
 			return E_2201;
@@ -3516,17 +3525,22 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 			}
 		}
 	} else {
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step3");
 		propname = {MNID_ID, PSETID_APPOINTMENT, PidLidAppointmentTimeZoneDefinitionStartDisplay};
 		if (!get_propids(&propnames, &propids))
 			return E_2201;
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step4");
 		bin = pmsg->proplist.get<BINARY>(PROP_TAG(PT_BINARY, propids.ppropid[0]));
 		if (bin != nullptr) {
+			mlog(LV_NOTICE, "derick-debug1::get_propids-step5");
 			propname.lid = PidLidAppointmentTimeZoneDefinitionEndDisplay;
 			if (!get_propids(&propnames, &propids))
 				return E_2201;
+			mlog(LV_NOTICE, "derick-debug1::get_propids-step6");
 			bin = pmsg->proplist.get<BINARY>(PROP_TAG(PT_BINARY, propids.ppropid[0]));
 		}
 		if (bin != nullptr) {
+			mlog(LV_NOTICE, "derick-debug1::get_propids-step7");
 			EXT_PULL ext_pull;
 			TIMEZONEDEFINITION tz_definition;
 			TIMEZONESTRUCT tz_struct;
@@ -3534,19 +3548,23 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 			ext_pull.init(bin->pb, bin->cb, alloc, 0);
 			if (ext_pull.g_tzdef(&tz_definition) != EXT_ERR_SUCCESS)
 				return "E-2209: PidLidAppointmentTimeZoneDefinitionEndDisplay contents not recognized";
+				mlog(LV_NOTICE, "derick-debug1::get_propids-step8");
 			tzid = tz_definition.keyname;
 			oxcical_convert_to_tzstruct(&tz_definition, &tz_struct);
 			ptz_component = oxcical_export_timezone(
 					pical, year - 1, tzid, &tz_struct);
 			if (ptz_component == nullptr)
 				return "E-2210: export_timezone returned an unspecified error";
+			mlog(LV_NOTICE, "derick-debug1::get_propids-step9");
 		}
 	}
     }
 	
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step10");
 	propname = {MNID_ID, PSETID_APPOINTMENT, PidLidAppointmentSubType};
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step11");
 	auto snum = pmsg->proplist.get<const uint8_t>(PROP_TAG(PT_BOOLEAN, propids.ppropid[0]));
 	BOOL b_allday = snum != nullptr && *snum != 0 ? TRUE : false;
 	auto pcomponent = icaltype != nullptr ? &pical.append_comp(icaltype) : &pical;
@@ -3556,7 +3574,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	if (!oxcical_export_recipient_table(*pcomponent, org_name,
 	    id2user, alloc, partstat, pmsg))
 		return "E-2211: export_recipient_table - unspecified error";
-	
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step12");
 	str = pmsg->proplist.get<char>(PR_BODY);
 	if (str != nullptr) {
 		auto kw = strcmp(method, "REPLY") == 0 ||
@@ -3569,6 +3587,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	/* IPM.Activity is RTF-only in Outlook, nothing in PR_BODY */
 	
 	if (!b_exceptional && b_recurrence) {
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step13");
 		if (!oxcical_export_rrule(*ptz_component, *pcomponent, &apprecurr))
 			return "E-2212: export_rrule - unspecified error";
 		if (oxcical_check_exdate(&apprecurr) &&
@@ -3584,16 +3603,17 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	auto err = oxcical_export_uid(*pmsg, *pcomponent, alloc, get_propids);
 	if (err != nullptr)
 		return err;
-
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step14");
 	propname = {MNID_ID, PSETID_APPOINTMENT, PidLidExceptionReplaceTime};
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step15");
 	auto proptag_xrt = PROP_TAG(PT_SYSTIME, propids.ppropid[0]);
 	err = oxcical_export_recid(*pmsg, proptag_xrt, b_exceptional,
 	      b_allday, *pcomponent, ptz_component, tzid, alloc, get_propids);
 	if (err != nullptr)
 		return err;
-
+mlog(LV_NOTICE, "derick-debug1::get_propids-step16");
 	str = pmsg->proplist.get<char>(PR_SUBJECT);
 	if (str != nullptr) {
 		auto piline = &pcomponent->append_line("SUMMARY", str);
@@ -3602,9 +3622,11 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	}
 	
 	if (has_start_time) {
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step17");
 		ICAL_TIME itime;
 		if (!ical_utc_to_datetime(ptz_component, start_time, &itime))
 			return "E-2221";
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step18");
 		char tmp_buff[1024];
 		if (ptz_component == nullptr)
 			sprintf_dtutc(tmp_buff, std::size(tmp_buff), itime);
@@ -3612,7 +3634,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 			sprintf_dt(tmp_buff, std::size(tmp_buff), itime);
 		else
 			sprintf_dtlcl(tmp_buff, std::size(tmp_buff), itime);
-
+	
 		auto &pilineDTS = pcomponent->append_line("DTSTART", tmp_buff);
 		if (ptz_component != nullptr) {
 			pilineDTS.append_param("TZID", tzid);
@@ -3620,14 +3642,17 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 				pilineDTS.append_param("VALUE", "DATE");
 		}
 	} else {
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step19");
 		propname = {MNID_ID, PSETID_TASK, PidLidTaskStartDate};
 		if (!get_propids(&propnames, &propids))
 			return E_2201;
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step20");
 		lnum = pmsg->proplist.get<const uint64_t>(PROP_TAG(PT_SYSTIME, propids.ppropid[0]));
 		if (lnum != nullptr) {
 			ICAL_TIME itime;
 			if (!ical_utc_to_datetime(ptz_component, rop_util_nttime_to_unix(*lnum), &itime))
 				return "E-2221";
+			mlog(LV_NOTICE, "derick-debug1::get_propids-step21");
 			char txt[64];
 			if (ptz_component == nullptr)
 				sprintf_dtutc(txt, sizeof(txt), itime);
@@ -3638,9 +3663,11 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	}
 	
 	if (has_start_time && start_time != end_time) {
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step22");
 		ICAL_TIME itime;
 		if (!ical_utc_to_datetime(ptz_component, end_time, &itime))
 			return "E-2222";
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step23");
 		char tmp_buff[1024];
 		if (ptz_component == nullptr)
 			sprintf_dtutc(tmp_buff, std::size(tmp_buff), itime);
@@ -3655,14 +3682,15 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 				pilineDTE.append_param("VALUE", "DATE");
 		}
 	}
-
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step24");
 	err = oxcical_export_task(*pmsg, *pcomponent, ptz_component, get_propids);
 	if (err != nullptr)
 		return err;
-
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step25");
 	propname = {MNID_STRING, PS_PUBLIC_STRINGS, 0, deconst(PidNameKeywords)};
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step26");
 	auto sa = pmsg->proplist.get<const STRING_ARRAY>(PROP_TAG(PT_MV_UNICODE, propids.ppropid[0]));
 	if (sa != nullptr) {
 		auto piline = &pical.append_line("CATEGORIES");
@@ -3682,6 +3710,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	               PidLidAttendeeCriticalChange : PidLidOwnerCriticalChange;
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step27");
 	lnum = pmsg->proplist.get<uint64_t>(PROP_TAG(PT_SYSTIME, propids.ppropid[0]));
 	if (lnum != nullptr) {
 		ICAL_TIME itime;
@@ -3694,6 +3723,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	propname = {MNID_ID, PSETID_APPOINTMENT, PidLidBusyStatus};
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step28");
 	auto pbusystatus = pmsg->proplist.get<uint32_t>(PROP_TAG(PT_LONG, propids.ppropid[0]));
 	if (NULL != pbusystatus) {
 		switch (static_cast<ol_busy_status>(*pbusystatus)) {
@@ -3714,6 +3744,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	propname = {MNID_ID, PSETID_APPOINTMENT, PidLidAppointmentSequence};
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step29");
 	auto psequence = pmsg->proplist.get<uint32_t>(PROP_TAG(PT_LONG, propids.ppropid[0]));
 	if (psequence != nullptr)
 		pcomponent->append_line("SEQUENCE", std::to_string(*psequence));
@@ -3721,12 +3752,14 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	propname = {MNID_ID, PSETID_APPOINTMENT, PidLidLocation};
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step30");
 	str = pmsg->proplist.get<char>(PROP_TAG(PT_UNICODE, propids.ppropid[0]));
 	if (str != nullptr) {
 		auto piline = &pcomponent->append_line("LOCATION", str);
 		propname = {MNID_STRING, PS_PUBLIC_STRINGS, 0, deconst(PidNameLocationUrl)};
 		if (!get_propids(&propnames, &propids))
 			return E_2201;
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step31");
 		str = pmsg->proplist.get<char>(PROP_TAG(PT_UNICODE, propids.ppropid[0]));
 		if (str != nullptr)
 			piline->append_param("ALTREP", str);
@@ -3746,6 +3779,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	propname = {MNID_ID, PSETID_APPOINTMENT, PidLidIntendedBusyStatus};
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step32");
 	num = pmsg->proplist.get<uint32_t>(PROP_TAG(PT_LONG, propids.ppropid[0]));
 	if (num != nullptr)
 		busystatus_to_line(static_cast<ol_busy_status>(*num),
@@ -3757,11 +3791,13 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 	propname = {MNID_ID, PSETID_APPOINTMENT, PidLidAppointmentNotAllowPropose};
 	if (!get_propids(&propnames, &propids))
 		return E_2201;
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step33");
 	auto flag = pmsg->proplist.get<uint8_t>(PROP_TAG(PT_BOOLEAN, propids.ppropid[0]));
 	if (flag != nullptr)
 		pcomponent->append_line("X-MICROSOFT-DISALLOW-COUNTER", *flag != 0 ? "TRUE" : "FALSE");
 	
 	if (!b_exceptional && pmsg->children.pattachments != nullptr) {
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step34");
 		for (size_t i = 0; i < pmsg->children.pattachments->count; ++i) {
 			if (pmsg->children.pattachments->pplist[i]->pembedded == nullptr)
 				continue;
@@ -3783,7 +3819,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 				return estr;
 		}
 	}
-
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step35");
 	return oxcical_export_valarm(*pmsg, *pcomponent, get_propids);
 } catch (const std::bad_alloc &) {
 	return "E-2097: ENOMEM";
@@ -3801,5 +3837,6 @@ BOOL oxcical_export(const MESSAGE_CONTENT *pmsg, ical &pical,
 		mlog(LV_ERR, "%s", err.c_str());
 		return false;
 	}
+	mlog(LV_NOTICE, "derick-debug1::get_propids-step39");
 	return TRUE;
 }
