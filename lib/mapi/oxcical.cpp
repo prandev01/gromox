@@ -3372,12 +3372,15 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 			mlog(LV_NOTICE, "derick-debug1::method=PUBLISH");
 			method = "PUBLISH";
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Request") == 0) {
+			mlog(LV_NOTICE, "derick-debug1::method=IPM.Schedule.Meeting.Request");
 			method = "REQUEST";
 			partstat = "NEEDS-ACTION";
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Resp.Pos") == 0) {
+			mlog(LV_NOTICE, "derick-debug1::method=IPM.Schedule.Meeting.Resp.Pos");
 			method = "REPLY";
 			partstat = "ACCEPTED";
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Resp.Tent") == 0) {
+			mlog(LV_NOTICE, "derick-debug1::method=IPM.Schedule.Meeting.Resp.Tent");
 			partstat = "TENTATIVE";
 			PROPERTY_NAME pn = {MNID_ID, PSETID_APPOINTMENT, PidLidAppointmentCounterProposal};
 			const PROPNAME_ARRAY pna = {1, &pn};
@@ -3391,16 +3394,20 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 				method = "REPLY";
 			}
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Resp.Neg") == 0) {
+			mlog(LV_NOTICE, "derick-debug1::method=IPM.Schedule.Meeting.Resp.Neg");
 			method = "REPLY";
 			partstat = "DECLINED";
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Canceled") == 0) {
+			mlog(LV_NOTICE, "derick-debug1::method=IPM.Schedule.Meeting.Canceled");
 			method = "CANCEL";
 			partstat = "NEEDS-ACTION";
 		} else if (strcasecmp(str, "IPM.Task") == 0) {
+			mlog(LV_NOTICE, "derick-debug1::method=IPM.Task");
 			method = "";
 			icaltype = nullptr;
 			pical.m_name = "VTODO";
 		} else if (strcasecmp(str, "IPM.Activity") == 0) {
+			mlog(LV_NOTICE, "derick-debug1::method=IPM.Activity");
 			method = "";
 			icaltype = nullptr;
 			pical.m_name = "VJOURNAL";
