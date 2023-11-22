@@ -472,6 +472,11 @@ BOOL message_object::write_message(const MESSAGE_CONTENT *pmsgctnt)
 	PROBLEM_ARRAY tmp_problems;
 	mlog(LV_NOTICE, "derick-debug1::message_object::write_message");
 	msgctnt = *pmsgctnt;
+
+	TPROPVAL_ARRAY* parray = &msgctnt.proplist;
+	for (i=0; i<parray->count; i++) {
+		mlog(LV_NOTICE, "derick-debug1::PROPS %s", parray->ppropval[i].value_repr());
+	}
 	msgctnt.proplist.ppropval = cu_alloc<TAGGED_PROPVAL>(pmsgctnt->proplist.count);
 	if (msgctnt.proplist.ppropval == nullptr)
 		return FALSE;
