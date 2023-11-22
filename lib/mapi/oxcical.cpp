@@ -722,8 +722,8 @@ static BOOL oxcical_parse_recipients(const ical_component &main_ev,
 	if (pmessage_class == nullptr)
 		pmessage_class = "IPM.Note";
 	/* ignore ATTENDEE when METHOD is "PUBLIC" */
-	// if (strcasecmp(pmessage_class, "IPM.Appointment") == 0)
-	// 	return TRUE;
+	if (strcasecmp(pmessage_class, "IPM.Appointment") == 0)
+		return TRUE;
 	prcpts = tarray_set_init();
 	if (prcpts == nullptr)
 		return FALSE;
@@ -1988,8 +1988,8 @@ static const char *oxcical_import_internal(const char *str_zone, const char *met
 	namemap phash;
 	if (b_proposal && !oxcical_parse_proposal(phash, &last_propid, pmsg))
 		return "E-2190: oxcical_parse_proposal returned an unspecified error";
-	// if (!oxcical_parse_categories(*pmain_event, phash, &last_propid, pmsg))
-	// 	return "E-2191: oxcical_parse_categories returned an unspecified error";
+	if (!oxcical_parse_categories(*pmain_event, phash, &last_propid, pmsg))
+		return "E-2191: oxcical_parse_categories returned an unspecified error";
 	if (!oxcical_parse_class(*pmain_event, pmsg))
 		return "E-2192: oxcical_parse_class returned an unspecified error";
 	if (!oxcical_parse_body(*pmain_event, method, pmsg))
@@ -2476,7 +2476,6 @@ ec_error_t oxcical_import_multi(const char *str_zone, const ical &pical,
 		pvalue = piline->get_first_subvalue();
 		if (NULL != pvalue) {
 			if (0 == strcasecmp(pvalue, "PUBLISH")) {
-				mlog(LV_NOTICE, "derick-debug1::oxcical_import_multi-method - PUBLISH");
 				if (uid_list.size() > 1) {
 					if (!oxcical_import_events(str_zone,
 					    calendartype, pical,
@@ -2724,19 +2723,16 @@ static BOOL oxcical_export_recipient_table(ical_component &pevent_component,
 	char username[UADDR_SIZE];
 	char tmp_value[334];
 	
-	mlog(LV_NOTICE, "derick-debug1::oxcical_export_recipient_table");
 	if (pmsg->children.prcpts == nullptr)
 		return TRUE;
-	mlog(LV_NOTICE, "derick-debug1::oxcical_export_recipient_table-pmsg->children.prcpts != nullptr");
 	auto str = pmsg->proplist.get<const char>(PR_MESSAGE_CLASS);
 	if (str == nullptr)
 		str = pmsg->proplist.get<char>(PR_MESSAGE_CLASS_A);
 	if (str == nullptr)
 		str = "IPM.Note";
 	/* ignore ATTENDEE when METHOD is "PUBLIC" */
-	// if (strcasecmp(str, "IPM.Appointment") == 0)
-		// return TRUE;
-	mlog(LV_NOTICE, "derick-debug1::if (strcasecmp(str, IPM.Appointment) == 0)");
+	if (strcasecmp(str, "IPM.Appointment") == 0)
+		return TRUE;
 	if (is_meeting_response(str)) {
 		str = pmsg->proplist.get<char>(PR_SENT_REPRESENTING_SMTP_ADDRESS);
 		if (str == nullptr)
@@ -3372,18 +3368,13 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 		if (strcasecmp(str, "IPM.Appointment") == 0) {
 			mlog(LV_NOTICE, "derick-debug1::method=PUBLISH");
 			method = "PUBLISH";
-			// method = "REQUEST";
-			// partstat = "NEEDS-ACTION";
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Request") == 0) {
-			mlog(LV_NOTICE, "derick-debug1::method=IPM.Schedule.Meeting.Request");
 			method = "REQUEST";
 			partstat = "NEEDS-ACTION";
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Resp.Pos") == 0) {
-			mlog(LV_NOTICE, "derick-debug1::method=IPM.Schedule.Meeting.Resp.Pos");
 			method = "REPLY";
 			partstat = "ACCEPTED";
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Resp.Tent") == 0) {
-			mlog(LV_NOTICE, "derick-debug1::method=IPM.Schedule.Meeting.Resp.Tent");
 			partstat = "TENTATIVE";
 			PROPERTY_NAME pn = {MNID_ID, PSETID_APPOINTMENT, PidLidAppointmentCounterProposal};
 			const PROPNAME_ARRAY pna = {1, &pn};
@@ -3397,20 +3388,16 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 				method = "REPLY";
 			}
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Resp.Neg") == 0) {
-			mlog(LV_NOTICE, "derick-debug1::method=IPM.Schedule.Meeting.Resp.Neg");
 			method = "REPLY";
 			partstat = "DECLINED";
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Canceled") == 0) {
-			mlog(LV_NOTICE, "derick-debug1::method=IPM.Schedule.Meeting.Canceled");
 			method = "CANCEL";
 			partstat = "NEEDS-ACTION";
 		} else if (strcasecmp(str, "IPM.Task") == 0) {
-			mlog(LV_NOTICE, "derick-debug1::method=IPM.Task");
 			method = "";
 			icaltype = nullptr;
 			pical.m_name = "VTODO";
 		} else if (strcasecmp(str, "IPM.Activity") == 0) {
-			mlog(LV_NOTICE, "derick-debug1::method=IPM.Activity");
 			method = "";
 			icaltype = nullptr;
 			pical.m_name = "VJOURNAL";
@@ -3700,17 +3687,17 @@ mlog(LV_NOTICE, "derick-debug1::get_propids-step16");
 	if (err != nullptr)
 		return err;
 	mlog(LV_NOTICE, "derick-debug1::get_propids-step25");
-	// propname = {MNID_STRING, PS_PUBLIC_STRINGS, 0, deconst(PidNameKeywords)};
-	// if (!get_propids(&propnames, &propids))
-	// 	return E_2201;
-	// 	mlog(LV_NOTICE, "derick-debug1::get_propids-step26");
-	// auto sa = pmsg->proplist.get<const STRING_ARRAY>(PROP_TAG(PT_MV_UNICODE, propids.ppropid[0]));
-	// if (sa != nullptr) {
-	// 	auto piline = &pical.append_line("CATEGORIES");
-	// 	auto &pivalue = piline->append_value();
-	// 	for (size_t i = 0; i < sa->count; ++i)
-	// 		pivalue.append_subval(sa->ppstr[i]);
-	// }
+	propname = {MNID_STRING, PS_PUBLIC_STRINGS, 0, deconst(PidNameKeywords)};
+	if (!get_propids(&propnames, &propids))
+		return E_2201;
+		mlog(LV_NOTICE, "derick-debug1::get_propids-step26");
+	auto sa = pmsg->proplist.get<const STRING_ARRAY>(PROP_TAG(PT_MV_UNICODE, propids.ppropid[0]));
+	if (sa != nullptr) {
+		auto piline = &pical.append_line("CATEGORIES");
+		auto &pivalue = piline->append_value();
+		for (size_t i = 0; i < sa->count; ++i)
+			pivalue.append_subval(sa->ppstr[i]);
+	}
 	
 	num = pmsg->proplist.get<uint32_t>(PR_SENSITIVITY);
 	sensitivity_to_line(num != nullptr ? static_cast<mapi_sensitivity>(*num) :
