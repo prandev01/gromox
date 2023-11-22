@@ -2733,8 +2733,8 @@ static BOOL oxcical_export_recipient_table(ical_component &pevent_component,
 	if (str == nullptr)
 		str = "IPM.Note";
 	/* ignore ATTENDEE when METHOD is "PUBLIC" */
-	if (strcasecmp(str, "IPM.Appointment") == 0)
-		return TRUE;
+	// if (strcasecmp(str, "IPM.Appointment") == 0)
+		// return TRUE;
 	mlog(LV_NOTICE, "derick-debug1::if (strcasecmp(str, IPM.Appointment) == 0)");
 	if (is_meeting_response(str)) {
 		str = pmsg->proplist.get<char>(PR_SENT_REPRESENTING_SMTP_ADDRESS);
