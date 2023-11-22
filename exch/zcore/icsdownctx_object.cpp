@@ -9,6 +9,7 @@
 #include <gromox/proptag_array.hpp>
 #include <gromox/restriction.hpp>
 #include <gromox/rop_util.hpp>
+#include <gromox/util.hpp>
 #include "common_util.h"
 #include "exmdb_client.h"
 #include "ics_state.h"
