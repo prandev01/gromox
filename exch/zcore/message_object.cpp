@@ -458,8 +458,8 @@ BOOL message_object::reload()
 }
 
 static constexpr uint32_t trimtags[] = {
-	PidTagMid, /*PR_DISPLAY_TO, PR_DISPLAY_CC,
-	PR_DISPLAY_BCC,*/ PR_MESSAGE_SIZE, PR_HASATTACH,
+	PidTagMid, PR_DISPLAY_TO, PR_DISPLAY_CC,
+	PR_DISPLAY_BCC, PR_MESSAGE_SIZE, PR_HASATTACH,
 	PR_CHANGE_KEY, PidTagChangeNumber,
 	PR_PREDECESSOR_CHANGE_LIST,
 };
@@ -482,8 +482,8 @@ BOOL message_object::write_message(const MESSAGE_CONTENT *pmsgctnt)
 		return FALSE;
 	memcpy(msgctnt.proplist.ppropval, pmsgctnt->proplist.ppropval,
 				sizeof(TAGGED_PROPVAL)*pmsgctnt->proplist.count);
-	for (auto t : trimtags)
-		common_util_remove_propvals(&msgctnt.proplist, t);
+	// for (auto t : trimtags)
+	// 	common_util_remove_propvals(&msgctnt.proplist, t);
 	if (!exmdb_client::clear_message_instance(pmessage->pstore->get_dir(),
 	    pmessage->instance_id))
 		return FALSE;
