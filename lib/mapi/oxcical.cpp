@@ -2723,8 +2723,10 @@ static BOOL oxcical_export_recipient_table(ical_component &pevent_component,
 	char username[UADDR_SIZE];
 	char tmp_value[334];
 	
+	mlog(LV_NOTICE, "derick-debug1::oxcical_export_recipient_table");
 	if (pmsg->children.prcpts == nullptr)
 		return TRUE;
+	mlog(LV_NOTICE, "derick-debug1::oxcical_export_recipient_table-pmsg->children.prcpts != nullptr");
 	auto str = pmsg->proplist.get<const char>(PR_MESSAGE_CLASS);
 	if (str == nullptr)
 		str = pmsg->proplist.get<char>(PR_MESSAGE_CLASS_A);
@@ -2733,6 +2735,7 @@ static BOOL oxcical_export_recipient_table(ical_component &pevent_component,
 	/* ignore ATTENDEE when METHOD is "PUBLIC" */
 	if (strcasecmp(str, "IPM.Appointment") == 0)
 		return TRUE;
+	mlog(LV_NOTICE, "derick-debug1::if (strcasecmp(str, IPM.Appointment) == 0)");
 	if (is_meeting_response(str)) {
 		str = pmsg->proplist.get<char>(PR_SENT_REPRESENTING_SMTP_ADDRESS);
 		if (str == nullptr)
@@ -3687,17 +3690,17 @@ mlog(LV_NOTICE, "derick-debug1::get_propids-step16");
 	if (err != nullptr)
 		return err;
 	mlog(LV_NOTICE, "derick-debug1::get_propids-step25");
-	propname = {MNID_STRING, PS_PUBLIC_STRINGS, 0, deconst(PidNameKeywords)};
-	if (!get_propids(&propnames, &propids))
-		return E_2201;
-		mlog(LV_NOTICE, "derick-debug1::get_propids-step26");
-	auto sa = pmsg->proplist.get<const STRING_ARRAY>(PROP_TAG(PT_MV_UNICODE, propids.ppropid[0]));
-	if (sa != nullptr) {
-		auto piline = &pical.append_line("CATEGORIES");
-		auto &pivalue = piline->append_value();
-		for (size_t i = 0; i < sa->count; ++i)
-			pivalue.append_subval(sa->ppstr[i]);
-	}
+	// propname = {MNID_STRING, PS_PUBLIC_STRINGS, 0, deconst(PidNameKeywords)};
+	// if (!get_propids(&propnames, &propids))
+	// 	return E_2201;
+	// 	mlog(LV_NOTICE, "derick-debug1::get_propids-step26");
+	// auto sa = pmsg->proplist.get<const STRING_ARRAY>(PROP_TAG(PT_MV_UNICODE, propids.ppropid[0]));
+	// if (sa != nullptr) {
+	// 	auto piline = &pical.append_line("CATEGORIES");
+	// 	auto &pivalue = piline->append_value();
+	// 	for (size_t i = 0; i < sa->count; ++i)
+	// 		pivalue.append_subval(sa->ppstr[i]);
+	// }
 	
 	num = pmsg->proplist.get<uint32_t>(PR_SENSITIVITY);
 	sensitivity_to_line(num != nullptr ? static_cast<mapi_sensitivity>(*num) :
