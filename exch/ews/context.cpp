@@ -167,6 +167,7 @@ sItem EWSContext::create(const std::string& dir, const sFolderSpec& parent, cons
 	uint64_t* messageId = content.proplist.get<uint64_t>(PidTagMid);
 	if(!messageId)
 		throw DispatchError(E3112);
+	mlog(LV_NOTICE, "derick::debug1-exmdb_server::write_message case4");
 	m_plugin.exmdb.write_message(dir.c_str(), m_auth_info.username, CP_ACP, parent.folderId, &content, &error);
 
 	sShape retshape = sShape(tItemResponseShape());

@@ -216,6 +216,7 @@ fastupctx_object_write_message(fastupctx_object *pctx, uint64_t folder_id)
 		return ecRpcFailed;
 	auto pinfo = emsmdb_interface_get_emsmdb_info();
 	ec_error_t e_result = ecRpcFailed;
+	mlog(LV_NOTICE, "derick::debug1-exmdb_server::write_message case3");
 	if (!exmdb_client::write_message(dir, plogon->get_account(), pinfo->cpid,
 	    folder_id, pctx->m_content, &e_result) || e_result != ecSuccess)
 		return e_result;

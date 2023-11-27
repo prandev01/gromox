@@ -4990,6 +4990,7 @@ ec_error_t zs_rfc822tomessage(GUID hsession, uint32_t hmessage,
 	std::unique_ptr<MESSAGE_CONTENT, mc_delete> pmsgctnt(cu_rfc822_to_message(pmessage->get_store(), mxf_flags, peml_bin));
 	if (pmsgctnt == nullptr)
 		return ecError;
+	mlog(LV_NOTICE, "derick::debug1-exmdb_server::write_message case9");
 	return pmessage->write_message(pmsgctnt.get()) ? ecSuccess : ecError;
 }
 
@@ -5027,7 +5028,7 @@ ec_error_t zs_icaltomessage(GUID hsession,
 		mlog(LV_NOTICE, "derick-debug1::cu_ical_to_message pmsgctnt == nullptr heyhey");
 		return ecError;
 	}
-		
+	mlog(LV_NOTICE, "derick::debug1-exmdb_server::write_message case10");
 	return pmessage->write_message(pmsgctnt.get()) ? ecSuccess : ecError;
 }
 
@@ -5067,6 +5068,7 @@ ec_error_t zs_imtomessage2(GUID session, uint32_t fld_handle,
 		if (rt2 != ecSuccess)
 			return rt2;
 		auto zmo = info->ptree->get_object<message_object>(msg_handle, &mapi_type);
+		mlog(LV_NOTICE, "derick::debug1-exmdb_server::write_message case11");
 		if (zmo == nullptr || mapi_type != zs_objtype::message ||
 		    !zmo->write_message(msgctnt.get()))
 			return ecError;
@@ -5105,6 +5107,7 @@ ec_error_t zs_vcftomessage(GUID hsession,
 	auto pmsgctnt = common_util_vcf_to_message(pmessage->get_store(), pvcf_bin);
 	if (pmsgctnt == nullptr)
 		return ecError;
+	mlog(LV_NOTICE, "derick::debug1-exmdb_server::write_message case12");
 	return pmessage->write_message(pmsgctnt) ? ecSuccess : ecError;
 }
 

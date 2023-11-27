@@ -1489,6 +1489,7 @@ BOOL exmdb_server::flush_instance(const char *dir, uint32_t instance_id,
 		exmdb_server::set_public_username(pinstance->username.c_str());
 	pdb.reset();
 	g_inside_flush_instance = true;
+	mlog(LV_NOTICE, "derick::debug1-exmdb_server::write_message case1");
 	BOOL b_result = exmdb_server::write_message(dir, account, CP_ACP,
 	                folder_id, pmsgctnt, pe_result);
 	g_inside_flush_instance = false;

@@ -1659,6 +1659,7 @@ ec_error_t cu_remote_copy_message(store_object *src_store, uint64_t message_id,
 		return ecError;
 	common_util_set_propvals(&pmsgctnt->proplist, &propval);
 	ec_error_t e_result = ecError;
+	mlog(LV_NOTICE, "derick::debug1-exmdb_server::write_message case7");
 	if (!exmdb_client::write_message(dst_store->get_dir(),
 	    dst_store->get_account(), pinfo->cpid, folder_id1,
 	    pmsgctnt, &e_result) || e_result != ecSuccess)
@@ -2077,6 +2078,7 @@ BOOL common_util_message_to_vcf(message_object *pmessage, BINARY *pvcf_bin)
 	if (!vcard.serialize(pvcf_bin->pc, VCARD_MAX_BUFFER_LEN))
 		return FALSE;	
 	pvcf_bin->cb = strlen(pvcf_bin->pc);
+	mlog(LV_NOTICE, "derick::debug1-exmdb_server::write_message case8");
 	if (!pmessage->write_message(pmsgctnt))
 		/* ignore */;
 	return TRUE;

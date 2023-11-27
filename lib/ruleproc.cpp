@@ -612,6 +612,7 @@ static ec_error_t op_copy_other(rxparam &par, const rule_node &rule,
 
 	/* Writeout */
 	ec_error_t e_result = ecRpcFailed;
+	mlog(LV_NOTICE, "derick::debug1-exmdb_server::write_message case13");
 	if (!exmdb_client::write_message(newdir, other_store.pserver_name, CP_UTF8,
 	    dst_fid, dst.get(), &e_result)) {
 		mlog(LV_DEBUG, "ruleproc: write_message failed");

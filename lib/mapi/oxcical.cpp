@@ -3369,6 +3369,7 @@ static std::string oxcical_export_internal(const char *method, const char *tzid,
 			mlog(LV_NOTICE, "derick-debug1::method=PUBLISH");
 			method = "PUBLISH";
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Request") == 0) {
+			mlog(LV_NOTICE, "derick-debug1::method=IPM.Schedule.Meeting.Request");
 			method = "REQUEST";
 			partstat = "NEEDS-ACTION";
 		} else if (strcasecmp(str, "IPM.Schedule.Meeting.Resp.Pos") == 0) {
