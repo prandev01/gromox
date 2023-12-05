@@ -179,6 +179,7 @@ static hook_result xa_alias_subst(MESSAGE_CONTEXT *ctx) try
 	auto &alias_map = *alias_map_ptr;
 	auto &domset = *domset_ptr;
 
+mlog(LV_NOTICE, "derick-debug1205::xa_alias_subst");
 	auto ctrl = &ctx->ctrl;
 	if (strchr(ctrl->from, '@') != nullptr) {
 		const auto &repl = alias_map.lookup(ctrl->from);
