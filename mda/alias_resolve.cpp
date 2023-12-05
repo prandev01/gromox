@@ -228,6 +228,7 @@ static hook_result xa_alias_subst(MESSAGE_CONTEXT *ctx) try
 		int gmm_result = 0;
 		if (!get_mlist_memb(todo[i].c_str(), ctx->ctrl.from, &gmm_result, exp_result))
 			gmm_result = ML_NONE;
+		mlog(LV_NOTICE, "derick-debug1205::gmm_result = %d", gmm_result);
 		switch (gmm_result) {
 		case ML_NONE:
 			output_rcpt.emplace_back(std::move(todo[i]));
