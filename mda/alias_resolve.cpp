@@ -230,9 +230,9 @@ static hook_result xa_alias_subst(MESSAGE_CONTEXT *ctx) try
 			gmm_result = ML_NONE;
 		mlog(LV_NOTICE, "derick-debug1205::gmm_result = %d", gmm_result);
 		switch (gmm_result) {
-		
-			// output_rcpt.emplace_back(std::move(todo[i]));
-			// continue;
+		case ML_NONE:
+			output_rcpt.emplace_back(std::move(todo[i]));
+			break;
 		case ML_OK:
 			mlog(LV_NOTICE, "derick-debug1205::case ML_OK:");
 			mlog(LV_DEBUG, "mlist_expand: subst RCPT %s -> %zu entities",
@@ -241,7 +241,6 @@ static hook_result xa_alias_subst(MESSAGE_CONTEXT *ctx) try
 				std::make_move_iterator(exp_result.begin()),
 				std::make_move_iterator(exp_result.end()));
 			continue;
-		case ML_NONE:
 		case ML_XDOMAIN:
 		case ML_XINTERNAL:
 		case ML_XSPECIFIED: {
