@@ -179,7 +179,6 @@ static hook_result xa_alias_subst(MESSAGE_CONTEXT *ctx) try
 	auto &alias_map = *alias_map_ptr;
 	auto &domset = *domset_ptr;
 
-mlog(LV_NOTICE, "derick-debug1205::xa_alias_subst");
 	auto ctrl = &ctx->ctrl;
 	if (strchr(ctrl->from, '@') != nullptr) {
 		const auto &repl = alias_map.lookup(ctrl->from);
@@ -196,6 +195,7 @@ mlog(LV_NOTICE, "derick-debug1205::xa_alias_subst");
 	std::set<std::string> seen;
 	std::vector<std::string> todo = ctrl->rcpt;
 
+	mlog(LV_NOTICE, "derick-debug1205::todo.size() = %d", todo.size());
 	for (size_t i = 0; i < todo.size(); ++i) {
 		auto at = strchr(todo[i].c_str(), '@');
 		if (at != nullptr && domset.find(&at[1]) != domset.cend()) {
