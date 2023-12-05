@@ -171,6 +171,7 @@ void transporter_init(const char *path, std::vector<std::string> &&names,
  */
 int transporter_run()
 {
+	mlog(LV_NOTICE, "derick-debug1205::transporter_run");
 	try {
 		g_circles_ptr = std::make_unique<CIRCLE_NODE[]>(g_threads_max * MAX_THROWING_NUM);
 	} catch (const std::bad_alloc &) {
