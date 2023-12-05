@@ -232,7 +232,7 @@ static hook_result xa_alias_subst(MESSAGE_CONTEXT *ctx) try
 		switch (gmm_result) {
 		case ML_NONE:
 			output_rcpt.emplace_back(std::move(todo[i]));
-			continue;
+			break;
 		case ML_OK:
 			mlog(LV_NOTICE, "derick-debug1205::case ML_OK:");
 			mlog(LV_DEBUG, "mlist_expand: subst RCPT %s -> %zu entities",
