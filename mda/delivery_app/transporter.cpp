@@ -889,6 +889,7 @@ static BOOL transporter_throw_context(MESSAGE_CONTEXT *pcontext)
 		&pthr_data->anti_loop.thrown_list, pnode)) {
 		if (static_cast<CIRCLE_NODE *>(pnode->pdata)->hook_addr ==
 			pthr_data->last_hook) {
+				mlog(LV_NOTICE, "derick-debug1205::static_cast<CIRCLE_NODE *>(pnode->pdata)->hook_addr == pthr_data->last_hook");
 			break;
 		}
 	}
@@ -897,6 +898,7 @@ static BOOL transporter_throw_context(MESSAGE_CONTEXT *pcontext)
 		transporter_put_context(pcontext);
 		return FALSE;
 	}
+	mlog(LV_NOTICE, "derick-debug1205::skipped NULL != pnode");
 	/* append this hook into thrown list */
 	pcircle = reinterpret_cast<CIRCLE_NODE *>(double_list_pop_front(&pthr_data->anti_loop.free_list));
 	if (NULL == pcircle) {
@@ -912,6 +914,7 @@ static BOOL transporter_throw_context(MESSAGE_CONTEXT *pcontext)
 	pthr_data->last_thrower = pthr_data->last_hook;
 	double_list_append_as_tail(&pthr_data->anti_loop.thrown_list,
 		&pcircle->node);
+	mlog(LV_NOTICE, "derick-debug1205::double_list_append_as_tail(&pthr_data->anti_loop.thrown_list, &pcircle->node);");
 	auto pass_result = transporter_pass_mpc_hooks(pcontext, pthr_data);
 	if (pass_result == hook_result::xcontinue) {
 		ret_val = FALSE;
@@ -921,6 +924,7 @@ static BOOL transporter_throw_context(MESSAGE_CONTEXT *pcontext)
 		ret_val = TRUE;
 	}
 	pnode = double_list_pop_back(&pthr_data->anti_loop.thrown_list);
+	mlog(LV_NOTICE, "derick-debug1205::double_list_pop_back(&pthr_data->anti_loop.thrown_list);");
 	double_list_append_as_tail(&pthr_data->anti_loop.free_list, pnode);
 	transporter_put_context(pcontext);
 	/* recover last thrower and last hook, like function's return operation */
