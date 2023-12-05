@@ -873,17 +873,25 @@ static BOOL transporter_throw_context(MESSAGE_CONTEXT *pcontext)
 	CIRCLE_NODE *pcircle;
 	HOOK_FUNCTION last_thrower, last_hook;
 
+	mlog(LV_NOTICE, "derick-debug1205::transporter_throw_context step1");
+
+
 	if (reinterpret_cast<uintptr_t>(pcontext) < reinterpret_cast<uintptr_t>(g_free_ptr.get()) ||
 	    reinterpret_cast<uintptr_t>(pcontext) > reinterpret_cast<uintptr_t>(g_free_ptr.get() + g_free_num)) {
 		mlog(LV_ERR, "transporter: invalid context pointer is detected when some "
 				"plugin try to throw message context");
+				mlog(LV_NOTICE, "derick-debug1205::transporter_throw_context step2");
 		return FALSE;
 	}
+
+		mlog(LV_NOTICE, "derick-debug1205::transporter_throw_context step3");
 	auto pthr_data = g_tls_key;
 	if (NULL == pthr_data) {
+		mlog(LV_NOTICE, "derick-debug1205::transporter_throw_context step4");
 		transporter_put_context(pcontext);
 		return FALSE;
 	}	
+	mlog(LV_NOTICE, "derick-debug1205::transporter_throw_context step5");
 	/* check if this hook is throwing the second message */
 	for (pnode=double_list_get_head(&pthr_data->anti_loop.thrown_list);
 		NULL!=pnode; pnode=double_list_get_after(
@@ -894,8 +902,10 @@ static BOOL transporter_throw_context(MESSAGE_CONTEXT *pcontext)
 			break;
 		}
 	}
+	mlog(LV_NOTICE, "derick-debug1205::transporter_throw_context step6");
 	if (NULL != pnode) {
 		mlog(LV_ERR, "transporter: message infinite loop is detected");
+		mlog(LV_NOTICE, "derick-debug1205::transporter_throw_context step7");
 		transporter_put_context(pcontext);
 		return FALSE;
 	}
