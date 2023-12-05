@@ -232,6 +232,7 @@ static hook_result xa_alias_subst(MESSAGE_CONTEXT *ctx) try
 			output_rcpt.emplace_back(std::move(todo[i]));
 			continue;
 		case ML_OK:
+			mlog(LV_NOTICE, "derick-debug1205::case ML_OK:");
 			mlog(LV_DEBUG, "mlist_expand: subst RCPT %s -> %zu entities",
 				todo[i].c_str(), exp_result.size());
 			todo.insert(todo.begin() + i + 1,
@@ -241,6 +242,7 @@ static hook_result xa_alias_subst(MESSAGE_CONTEXT *ctx) try
 		case ML_XDOMAIN:
 		case ML_XINTERNAL:
 		case ML_XSPECIFIED: {
+			mlog(LV_NOTICE, "derick-debug1205::case ML_XSPECIFIED:");
 			auto tpl = gmm_result == ML_XDOMAIN ? "BOUNCE_MLIST_DOMAIN" :
 			           gmm_result == ML_XINTERNAL ? "BOUNCE_MLIST_INTERNAL" :
 			           "BOUNCE_MLIST_SPECIFIED";
