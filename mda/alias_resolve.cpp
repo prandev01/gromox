@@ -231,7 +231,7 @@ static hook_result xa_alias_subst(MESSAGE_CONTEXT *ctx) try
 		mlog(LV_NOTICE, "derick-debug1205::gmm_result = %d", gmm_result);
 		switch (gmm_result) {
 		case ML_NONE:
-			output_rcpt.emplace_back(std::move(todo[i]));
+			// output_rcpt.emplace_back(std::move(todo[i]));
 			break;
 		case ML_OK:
 			mlog(LV_NOTICE, "derick-debug1205::case ML_OK:");
@@ -266,6 +266,8 @@ static hook_result xa_alias_subst(MESSAGE_CONTEXT *ctx) try
 		}
 	}
 	ctrl->rcpt = std::move(output_rcpt);
+	mlog(LV_NOTICE, "derick-debug1205::output_rcpt.size() = %d", output_rcpt.size());
+
 	return ctx->ctrl.rcpt.empty() ? hook_result::stop : hook_result::xcontinue;
 } catch (const std::bad_alloc &) {
 	mlog(LV_INFO, "E-1611: ENOMEM");
